@@ -5,17 +5,17 @@
 </p>
 
 <p align="center">
+<a href="https://trendshift.io/repositories/70948?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-70948" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/70948/daily?language=QML" alt="enhaoswen%2FTide-island | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/70948?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-70948" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/70948/weekly?language=QML" alt="enhaoswen%2FTide-island | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/70948?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-70948" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/70948/monthly?language=QML" alt="enhaoswen%2FTide-island | Trendshift" width="250" height="55"/></a>
+</p>
+
+<p align="center">
   <sub>
     <a href="./README.md">English</a>
      · 
     <a href="./README.zh-CN.md">简体中文</a>
   </sub>
-</p>
-
-<p align="center">
-<a href="https://trendshift.io/repositories/70948?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-70948" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/70948/daily?language=QML" alt="enhaoswen%2FTide-island | Trendshift" width="250" height="55"/></a>
-<a href="https://trendshift.io/repositories/70948?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-70948" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/70948/weekly?language=QML" alt="enhaoswen%2FTide-island | Trendshift" width="250" height="55"/></a>
-<a href="https://trendshift.io/repositories/70948?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-70948" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/70948/monthly?language=QML" alt="enhaoswen%2FTide-island | Trendshift" width="250" height="55"/></a>
 </p>
 
 <p align="center">
