@@ -56,8 +56,8 @@ optdepends=(
 )
 conflicts=('tide-island-git')
 install='tide-island.install'
-source=("$pkgname-$pkgver.tar.gz::https://github.com/enhaoswen/Tide-island/archive/refs/tags/$pkgver.tar.gz")
-sha256sums=('f14cbdfd35a3a4edc8ba7295cafb539926b7509f77e1efc8af3d1b4784c43d6a')
+source=("$pkgname-$pkgver.tar.xz::https://github.com/enhaoswen/Tide-island/releases/download/$pkgver/tide-island-source.tar.xz")
+sha256sums=('d0cca06fdcbd447e23f60aa96a8a6a9c503dd91d690bbc1c1cbadcc4f39efd1f')
 
 build() {
   cmake -S "$_srcdir" -B "$_builddir" \
