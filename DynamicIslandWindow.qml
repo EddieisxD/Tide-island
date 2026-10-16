@@ -1164,6 +1164,7 @@ PanelWindow {
             currentArtUrl: islandContainer.currentArtUrl
             currentWorkspace: islandContainer.currentWs
             customSwipeActive: customSwipeLoader.active
+            statsVisible: customSwipeLoader.active && root.autoHideProgress > 0.001
             lyricsCavaActive: islandContainer.lyricsSwipeVisible
                 && islandContainer.rightSwipeProgress > 0.001
 

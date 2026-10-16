@@ -1,6 +1,5 @@
 import QtQuick
 import IslandBackend
-import Quickshell.Io
 
 Item {
     id: root
@@ -18,6 +17,7 @@ Item {
     property string currentArtUrl: ""
     property int currentWorkspace: 1
     property bool customSwipeActive: false
+    property bool statsVisible: customSwipeActive
     property bool lyricsCavaActive: false
     property var weatherService: null
 
@@ -46,10 +46,10 @@ Item {
     property real currentVolume: -1
     property bool isMuted: false
     property real currentBrightness: -1
-    property real currentCpuUsage: -1
-    property real currentRamUsage: -1
+    readonly property real currentCpuUsage: SystemStats.cpuUsage
+    readonly property real currentRamUsage: SystemStats.ramUsage
     property var cavaLevels: [0, 0, 0, 0, 0, 0, 0, 0]
-    property real currentStorageUsage: -1
+    readonly property real currentStorageUsage: SystemStats.storageUsage
     readonly property string storageStatusIcon: "\u{F1C0}"
     property var customLeftItems: []
 
@@ -66,11 +66,13 @@ Item {
         syncCustomLeftItems();
         refreshMissingValues();
         updateCavaSubscription();
+        updateStatsSubscription();
     }
-    onUsesSystemStatsModuleChanged: refreshMissingValues()
-    onUsesStorageModuleChanged: refreshMissingValues()
+    onUsesSystemStatsModuleChanged: updateStatsSubscription()
+    onUsesStorageModuleChanged: updateStatsSubscription()
     onUsesCavaModuleChanged: updateCavaSubscription()
     onCustomSwipeActiveChanged: updateCavaSubscription()
+    onStatsVisibleChanged: updateStatsSubscription()
     onLyricsCavaActiveChanged: updateCavaSubscription()
     onBatteryCapacityChanged: syncCustomLeftItems()
     onIsChargingChanged: syncCustomLeftItems()
@@ -89,10 +91,12 @@ Item {
         syncCustomLeftItems();
         refreshMissingValues();
         updateCavaSubscription();
+        updateStatsSubscription();
     }
 
     Component.onDestruction: {
         SystemServices.setCavaClientActive(systemServicesClientId, false);
+        SystemStats.setClientActive(systemServicesClientId, false, false);
     }
 
     function statusIcon(name) {
@@ -163,10 +167,13 @@ Item {
             SystemServices.requestBrightness();
         if (currentVolume < 0)
             SystemServices.requestVolume();
-        if (usesSystemStatsModule)
-            SystemServices.requestSystemStats();
-        if (usesStorageModule)
-            storagePollTimer.restart();
+        SystemStats.refresh();
+    }
+
+    function updateStatsSubscription() {
+        SystemStats.setClientActive(systemServicesClientId,
+                                    statsVisible && usesSystemStatsModule,
+                                    statsVisible && usesStorageModule);
     }
 
     function updateCavaSubscription() {
@@ -359,45 +366,6 @@ Item {
         )
     }
 
-    Timer {
-        id: systemStatsPollTimer
-
-        interval: 3000
-        repeat: true
-        running: root.usesSystemStatsModule
-        triggeredOnStart: true
-
-        onTriggered: SystemServices.requestSystemStats()
-    }
-    Process {
-        id: storagePollProcess
-        command: ["df", "--output=pcent", "/"]
-        running: false
-
-        stdout: SplitParser {
-            onRead: function(line) {
-                const trimmed = line.trim();
-                if (trimmed === "" || trimmed.indexOf("Use%") >= 0)
-                    return;
-                const pct = parseInt(trimmed.replace("%", ""));
-                if (!isNaN(pct))
-                    root.currentStorageUsage = pct;
-            }
-        }
-    }
-
-    Timer {
-        id: storagePollTimer
-
-        interval: 10000
-        repeat: true
-        running: root.usesStorageModule
-        triggeredOnStart: true
-
-        onTriggered: storagePollProcess.running = true
-    }
-
-
     Connections {
         target: SystemServices
 
@@ -411,15 +379,6 @@ Item {
                 return;
             root.currentVolume = root.clamp01(value);
             root.isMuted = muted;
-        }
-
-        function onSystemStatsReady(cpuUsage, ramUsage, errorString) {
-            if (errorString !== "")
-                return;
-            if (cpuUsage >= 0)
-                root.currentCpuUsage = root.clamp01(cpuUsage);
-            if (ramUsage >= 0)
-                root.currentRamUsage = root.clamp01(ramUsage);
         }
 
         function onCavaLevelsChanged() {

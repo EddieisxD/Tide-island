@@ -1,4 +1,5 @@
 #include "UserConfigBackend.h"
+#include "../common/JsonComments.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -29,33 +30,6 @@ QVariantList defaultDynamicIslandLeftSwipeItems()
         QStringLiteral("albumcover"),
         QStringLiteral("trackname"),
     };
-}
-
-QByteArray stripJsonComments(const QByteArray &input)
-{
-    QString text = QString::fromUtf8(input);
-
-    // Remove /* ... */ block comments
-    static const QRegularExpression blockRe(QStringLiteral("/\\*.*?\\*/"), QRegularExpression::DotMatchesEverythingOption);
-    text.replace(blockRe, QString());
-
-    // Remove // line comments
-    const QStringList lines = text.split(u'\n');
-    QStringList stripped;
-    bool inString = false;
-    for (const QString &line : lines) {
-        QString result;
-        for (int i = 0; i < line.size(); ++i) {
-            const QChar ch = line.at(i);
-            if (ch == u'"' && (i == 0 || line.at(i - 1) != u'\\'))
-                inString = !inString;
-            if (!inString && ch == u'/' && i + 1 < line.size() && line.at(i + 1) == u'/')
-                break;
-            result.append(ch);
-        }
-        stripped.append(result);
-    }
-    return stripped.join(u'\n').toUtf8();
 }
 
 QString jsonString(const QJsonObject &object, QLatin1String key, const QString &fallback)
@@ -462,12 +436,12 @@ void UserConfigBackend::loadConfig()
 
     QFile configFile(m_userConfigPath);
     if (configFile.exists()) {
-        if (!configFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        if (!configFile.open(QIODevice::ReadOnly)) {
             nextConfigError = QStringLiteral("Could not read %1: %2").arg(m_userConfigPath, configFile.errorString());
         } else {
             const QByteArray configBytes = configFile.readAll();
             if (!configBytes.trimmed().isEmpty()) {
-                const QByteArray strippedBytes = stripJsonComments(configBytes);
+                const QByteArray strippedBytes = JsonComments::strip(configBytes);
                 QJsonParseError parseError;
                 const QJsonDocument document = QJsonDocument::fromJson(strippedBytes, &parseError);
                 if (parseError.error != QJsonParseError::NoError) {

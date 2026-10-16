@@ -38,7 +38,6 @@ public:
     Q_INVOKABLE void setBrightness(double value);
     Q_INVOKABLE void requestVolume();
     Q_INVOKABLE void setVolume(double value);
-    Q_INVOKABLE void requestSystemStats();
     Q_INVOKABLE void requestTlpState();
     Q_INVOKABLE void setTlpMode(const QString &mode,
                                 const QString &sudoPassword = QString(),
@@ -69,7 +68,6 @@ signals:
     void brightnessSetFinished(double value, bool success, const QString &errorString);
     void volumeSnapshotReady(double value, bool muted, const QString &errorString);
     void volumeSetFinished(double value, bool success, const QString &errorString);
-    void systemStatsReady(double cpuUsage, double ramUsage, const QString &errorString);
     void tlpStateReady(bool available, const QString &profile, const QString &output, const QString &errorString);
     void tlpSetFinished(bool success, int exitCode, const QString &output, const QString &errorString);
     void cavaLevelsChanged();
@@ -157,9 +155,6 @@ private:
     QString m_pendingNotificationAppName;
     QString m_pendingNotificationSummary;
     QString m_pendingNotificationBody;
-
-    qint64 m_lastCpuTotal = -1;
-    qint64 m_lastCpuIdle = -1;
 
     QVariantList m_cavaLevels;
     QSet<QString> m_cavaClients;

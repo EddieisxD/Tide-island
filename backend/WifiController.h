@@ -11,8 +11,11 @@
 #include <QTimer>
 #include <QVariant>
 #include <QVariantMap>
+#include <atomic>
+#include <memory>
 
 class IwdAgent;
+struct WifiRefreshSnapshot;
 
 #include <QObject>
 #include <QString>
@@ -45,6 +48,7 @@ public:
     using ConnectionSettingsMap = QMap<QString, QVariantMap>;
 
     explicit WifiController(QObject *parent = nullptr);
+    ~WifiController() override;
 
     QString backendName() const;
     bool supported() const;
@@ -89,7 +93,7 @@ private slots:
     void handleAccessPointRemoved(const QDBusObjectPath &accessPointPath);
     void handleDeviceAdded(const QDBusObjectPath &devicePath);
     void handleDeviceRemoved(const QDBusObjectPath &devicePath);
-    void handleIwdInterfacesAdded(const QDBusObjectPath &objectPath, const QDBusArgument &interfacesAndProperties);
+    void handleIwdInterfacesAdded(const QDBusObjectPath &objectPath, const ConnectionSettingsMap &interfacesAndProperties);
     void handleIwdInterfacesRemoved(const QDBusObjectPath &objectPath, const QStringList &interfaces);
     void handleNewConnection(const QDBusObjectPath &connectionPath);
     void handleConnectionRemoved(const QDBusObjectPath &connectionPath);
@@ -98,9 +102,13 @@ private:
     friend class IwdAgent;
 
     void detectBackend();
+    void connectBackendSignals();
+    void requestRefresh(bool rescan, bool reportErrors);
+    void startPendingRefresh();
+    void invalidateRefresh();
+    void applyRefreshSnapshot(const WifiRefreshSnapshot &snapshot);
     void refreshStateInternal();
     void refreshNetworksInternal(bool rescan, bool triggeredBySignal);
-    void reloadSavedConnections();
     void reconnectDeviceSignals(const QString &devicePath);
     void disconnectDeviceSignals();
     void ensureIwdAgentRegistered();
@@ -109,7 +117,6 @@ private:
     void setIwdAgentRegistrationError(const QString &error);
     QString takeIwdPassphraseForNetwork(const QString &networkPath);
 
-    QVariant getProperty(const QString &service, const QString &path, const QString &interfaceName, const QString &propertyName) const;
     bool setProperty(const QString &service, const QString &path, const QString &interfaceName, const QString &propertyName, const QVariant &value, QString *errorMessage = nullptr) const;
     QDBusMessage callMethod(const QString &service, const QString &path, const QString &interfaceName, const QString &methodName, const QList<QVariant> &arguments = {}) const;
 
@@ -127,8 +134,6 @@ private:
     void setUnsupportedReason(const QString &unsupportedReason);
     void updateBusyState();
     void updateStatusText();
-    void clearUnsupportedState(const QString &backendName, bool available, const QString &reason);
-    void clearSupportedState();
 
     QString errorTextForReply(const QDBusMessage &reply, const QString &fallback) const;
     bool activateSavedConnection(const QString &ssid, const QString &accessPointPath);
@@ -164,4 +169,10 @@ private:
     QTimer m_stateRefreshTimer;
     QTimer m_networkRefreshTimer;
     QTimer m_scanTimeoutTimer;
+    quint64 m_refreshGeneration = 0;
+    bool m_refreshRunning = false;
+    bool m_refreshPending = false;
+    bool m_rescanPending = false;
+    bool m_reportRefreshErrors = false;
+    std::shared_ptr<std::atomic_bool> m_refreshCancellation;
 };
