@@ -1108,10 +1108,11 @@ PanelWindow {
 
         onControlCenterLayerVisibleChanged: {
             if (!controlCenterLayerVisible) {
+                // The shells belong to this window, so close them even if
+                // clearing a provider's prompts or backend messages fails.
+                root.closeAllConnectivityDetails();
                 if (controlCenterLoader.item)
                     controlCenterLoader.item.closeConnectivityPanels();
-                else
-                    root.closeAllConnectivityDetails();
             }
         }
 

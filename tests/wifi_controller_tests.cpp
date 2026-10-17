@@ -1,4 +1,5 @@
 #include "WifiController.h"
+#include "BluetoothPairingAgent.h"
 
 #include <QCoreApplication>
 #include <QDBusConnection>
@@ -8,6 +9,8 @@
 #include <QElapsedTimer>
 #include <QJsonDocument>
 #include <QProcess>
+#include <QQmlComponent>
+#include <QQmlEngine>
 #include <QThread>
 #include <QtTest>
 #include <cstdio>
@@ -179,6 +182,59 @@ private:
         return wifi.networks()->data(wifi.networks()->index(index, 0), role);
     }
 private slots:
+    void initTestCase() {
+        // Use the same declarative registration as the production QML plugin.
+        // Registering a prebuilt instance would hide broken QML annotations.
+        qmlRegisterTypesAndRevisions<WifiController>("TideIsland.ConnectivityTests", 1);
+        qmlRegisterTypesAndRevisions<BluetoothPairingAgent>("TideIsland.ConnectivityTests", 1);
+    }
+
+    void qmlSingletonIsUsable_data() {
+        QTest::addColumn<QString>("typeName");
+        QTest::addColumn<QString>("methodName");
+        QTest::addColumn<QString>("propertyName");
+        QTest::newRow("wifi") << QString("WifiController") << QString("refreshState") << QString("enabled");
+        QTest::newRow("bluetooth-pairing") << QString("BluetoothPairingAgent") << QString("cancelRequest") << QString("requestActive");
+    }
+
+    void qmlSingletonIsUsable() {
+        QFETCH(QString, typeName);
+        QFETCH(QString, methodName);
+        QFETCH(QString, propertyName);
+        startService();
+        QQmlEngine engine;
+        QQmlComponent component(&engine);
+        component.setData(QString(R"(
+            import QtQml
+            import TideIsland.ConnectivityTests 1.0
+            QtObject {
+                readonly property var controller: %1
+                readonly property var state: controller.%2
+                readonly property bool callable: typeof controller.%3 === "function"
+                readonly property var ssid: %1 === WifiController ? controller.currentSsid : ""
+                function refresh() { controller.clearMessages(); controller.refreshState(); }
+            }
+        )").arg(typeName, propertyName, methodName).toUtf8(), QUrl());
+        QVERIFY2(component.isReady(), qPrintable(component.errorString()));
+        std::unique_ptr<QObject> consumer(component.create());
+        QVERIFY2(consumer, qPrintable(component.errorString()));
+        QVERIFY2(consumer->property("state").isValid(), "QML singleton has no state properties");
+        QVERIFY2(consumer->property("callable").toBool(), "QML singleton has no invokable methods");
+        if (typeName == QLatin1String("WifiController")) {
+            QTRY_COMPARE(consumer->property("ssid").toString(), QString("Home"));
+            QVERIFY(consumer->property("state").toBool());
+            QVERIFY(QMetaObject::invokeMethod(consumer.get(), "refresh"));
+            configure({{"enabled", false}});
+            QTRY_VERIFY(!consumer->property("state").toBool());
+            QTRY_COMPARE(consumer->property("ssid").toString(), QString());
+            configure({{"enabled", true}});
+            QTRY_VERIFY(consumer->property("state").toBool());
+            QTRY_COMPARE(consumer->property("ssid").toString(), QString("Home"));
+        } else {
+            QVERIFY(!consumer->property("state").toBool());
+        }
+    }
+
     void cleanup() {
         m_helper.kill();
         m_helper.waitForFinished(2000);

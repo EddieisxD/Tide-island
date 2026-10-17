@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(TideIsland VERSION 1.0.42 LANGUAGES CXX)
+project(TideIsland VERSION 1.0.43 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -46,6 +46,7 @@ set_tests_properties(clipboard_preview PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=o
 
 add_executable(wifi_controller_tests
     tests/wifi_controller_tests.cpp
+    backend/BluetoothPairingAgent.cpp backend/BluetoothPairingAgent.h
     backend/WifiController.cpp backend/WifiController.h
     backend/WifiNetworkModel.cpp backend/WifiNetworkModel.h
 )
