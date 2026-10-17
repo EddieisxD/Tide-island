@@ -66,9 +66,10 @@ PagePanel {
                 font.family: Theme.titleFontFamily
                 text: "Font"
                 color: Theme.textColor
-                font.pixelSize: 30
-                x: 60
-                y: 50
+                font.pixelSize: 26
+                font.weight: Font.DemiBold
+                x: 32
+                y: 32
             }
 
             Text {
@@ -79,25 +80,26 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 40
+                anchors.rightMargin: 32
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 23
+                font.pixelSize: 15
+                font.weight: Font.DemiBold
                 color: Theme.textColor
             }
 
             Rectangle {
                 id: fontPanel
                 color: Theme.cardBgColor
-                radius: 16
+                radius: 12
                 border.width: 1
                 border.color: Theme.splitLineColor
 
                 anchors.top: fontTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 30
+                anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 40
+                anchors.rightMargin: 32
                 height: fontColumn.height + 30
 
                 Column {
@@ -210,7 +212,7 @@ PagePanel {
             id: rowTitle
             text: row.title
             font.family: Theme.textFontFamily
-            font.pixelSize: 18
+            font.pixelSize: 14
             color: Theme.textColor
             anchors.top: parent.top
             anchors.left: parent.left
@@ -219,7 +221,10 @@ PagePanel {
         Text {
             text: row.description
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 12
+            anchors.right: field.left
+            anchors.rightMargin: 18
+            wrapMode: Text.Wrap
             anchors.top: rowTitle.bottom
             anchors.topMargin: 5
             anchors.left: rowTitle.left

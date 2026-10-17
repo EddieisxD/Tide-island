@@ -15,6 +15,8 @@ class StyleTokensBackend final : public QObject {
     Q_PROPERTY(QColor clearBlack READ clearBlack CONSTANT FINAL)
 
     Q_PROPERTY(QColor panel READ panel CONSTANT FINAL)
+    Q_PROPERTY(QColor surfaceBorder READ surfaceBorder CONSTANT FINAL)
+    Q_PROPERTY(QColor surfaceHighlight READ surfaceHighlight CONSTANT FINAL)
     Q_PROPERTY(QColor module READ module CONSTANT FINAL)
     Q_PROPERTY(QColor moduleHover READ moduleHover CONSTANT FINAL)
     Q_PROPERTY(QColor track READ track CONSTANT FINAL)
@@ -79,6 +81,8 @@ public:
     QColor white() const;
     QColor clearBlack() const;
     QColor panel() const;
+    QColor surfaceBorder() const;
+    QColor surfaceHighlight() const;
     QColor module() const;
     QColor moduleHover() const;
     QColor track() const;

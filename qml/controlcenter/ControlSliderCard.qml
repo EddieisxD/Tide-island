@@ -26,7 +26,7 @@ Rectangle {
         return Math.max(0, Math.min(1, nextValue));
     }
 
-    radius: 24
+    radius: StyleTokens.radiusModule
     color: StyleTokens.clearBlack
     clip: true
 
@@ -56,17 +56,18 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            height: 22
-            radius: 11
-            color: "#1d1f24"
+            height: 24
+            radius: 12
+            color: "#30000000"
             border.width: 1
-            border.color: "#30333a"
+            border.color: StyleTokens.surfaceHighlight
             clip: true
 
             Rectangle {
+                z: 1
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: 10
+                anchors.leftMargin: 9
                 width: 18
                 height: 18
                 radius: 9
@@ -75,7 +76,7 @@ Rectangle {
                 Text {
                     anchors.centerIn: parent
                     text: root.iconText
-                    color: root.textSecondary
+                    color: root.value > 0.15 ? "#575760" : root.textSecondary
                     font.pixelSize: 13
                     font.family: root.iconFontFamily
                 }
@@ -87,12 +88,12 @@ Rectangle {
                     : Math.max(34, Math.min(sliderTrack.width, sliderTrack.width * root.value + 1))
                 height: parent.height
                 radius: parent.radius
-                color: "#eceef2"
+                color: "#e6e6eb"
             }
 
             Rectangle {
                 x: Math.max(0, Math.min(parent.width - width, parent.width * root.value - width / 2))
-                y: -1
+                y: (parent.height - height) / 2
                 width: root.knobSize
                 height: root.knobSize
                 radius: root.knobSize / 2

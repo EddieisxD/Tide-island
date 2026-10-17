@@ -19,7 +19,7 @@ Rectangle {
     ]
 
     color: Theme.cardBgColor
-    radius: 16
+    radius: 12
     border.width: 1
     border.color: Theme.splitLineColor
     implicitHeight: tlpColumn.implicitHeight + 36
@@ -143,7 +143,7 @@ Rectangle {
                 text: "Backend"
                 color: Theme.textColor
                 font.family: Theme.textFontFamily
-                font.pixelSize: 18
+                font.pixelSize: 14
             }
 
             Rectangle {
@@ -192,7 +192,7 @@ Rectangle {
             color: Theme.subtleTextColor
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 12
         }
 
         ButtonGroup {
@@ -222,7 +222,7 @@ Rectangle {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 18
+            font.pixelSize: 14
         }
 
         Text {
@@ -238,7 +238,7 @@ Rectangle {
             color: Theme.subtleTextColor
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 12
         }
 
         ButtonGroup {
@@ -268,7 +268,7 @@ Rectangle {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 18
+            font.pixelSize: 14
         }
 
         Text {
@@ -278,7 +278,7 @@ Rectangle {
             anchors.topMargin: 5
             color: Theme.subtleTextColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 12
         }
 
         Rectangle {
@@ -339,7 +339,7 @@ Rectangle {
                 rightPadding: 10
                 verticalAlignment: TextInput.AlignVCenter
                 font.family: Theme.textFontFamily
-                font.pixelSize: 14
+                font.pixelSize: 12
 
                 Component.onCompleted: text = root.passwordValue()
                 onAccepted: root.savePassword(text)
@@ -392,7 +392,7 @@ Rectangle {
                     text: modelData.label
                     color: option.selectedState ? Theme.textColor : Theme.secondaryTextColor
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     font.weight: option.selectedState ? Font.DemiBold : Font.Normal
                 }
 

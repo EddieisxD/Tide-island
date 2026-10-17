@@ -249,6 +249,17 @@ tide-island-config-app
 - **日历**：快速月历视图，提供周数与相对日期显示。可在控制中心点击日期、使用 `Super + K` 快捷键打开，支持鼠标滚轮与方向键切换月份、`Home` 键返回今天、`Esc` 快速关闭。
 
 
+### 磨砂玻璃外观
+
+灵动岛、网络与蓝牙详情、日历便笺使用统一的半透明材质。在设置的
+**General → Island Appearance → Background Transparency** 中调整岛的背景不透明度，
+设为 100 可使用实色背景。设置窗口支持浅色和深色外观。
+
+原生背景模糊使用 Quickshell 0.3+ 的
+[BackgroundEffect](https://quickshell.org/docs/v0.3.0/types/Quickshell.Wayland/BackgroundEffect/)，
+需要合成器支持 `ext-background-effect-v1` 协议。模糊区域会跟随可见面板的圆角和动画，
+面板关闭后移除；不支持该协议时显示半透明着色背景。Layer-shell 命名空间为 `tide-island`。
+
 ## Spotify 收藏
 
 音乐播放器支持把当前歌曲加入／移出 Spotify 的「已喜欢歌曲」，并同步客户端中的收藏状态。

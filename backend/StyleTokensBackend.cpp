@@ -31,10 +31,12 @@ STYLE_GLOBAL_COLOR(transparent, Qt::transparent)
 STYLE_GLOBAL_COLOR(black, Qt::black)
 STYLE_GLOBAL_COLOR(white, Qt::white)
 QColor StyleTokensBackend::clearBlack() const { return QColor(0, 0, 0, 0); }
-STYLE_GLOBAL_COLOR(panel, Qt::black)
-STYLE_COLOR(module, "#1c1c1e")
-STYLE_COLOR(moduleHover, "#232326")
-STYLE_COLOR(track, "#2c2c2e")
+STYLE_COLOR(panel, "#202125")
+STYLE_COLOR(surfaceBorder, "#26ffffff")
+STYLE_COLOR(surfaceHighlight, "#0cffffff")
+STYLE_COLOR(module, "#303136")
+STYLE_COLOR(moduleHover, "#3a3b40")
+STYLE_COLOR(track, "#242529")
 STYLE_COLOR(cardFillActive, "#26272b")
 STYLE_COLOR(cardFillHover, "#222327")
 STYLE_COLOR(connectivityCard, "#343437")
@@ -45,8 +47,8 @@ STYLE_COLOR(inputBorder, "#3f4046")
 STYLE_COLOR(secondaryButton, "#4a4b50")
 STYLE_COLOR(textPrimary, "#f5f5f7")
 STYLE_COLOR(textPrimaryBright, "#f7f8fb")
-STYLE_COLOR(textSecondary, "#8e8e93")
-STYLE_COLOR(textMuted, "#9b9da4")
+STYLE_COLOR(textSecondary, "#b6b6bf")
+STYLE_COLOR(textMuted, "#acadb6")
 STYLE_COLOR(textSoft, "#9da0a8")
 STYLE_COLOR(textTertiary, "#7f828a")
 STYLE_COLOR(textDisabled, "#878a92")
@@ -76,13 +78,13 @@ STYLE_COLOR(workspaceOverlayHover, "#280d131a")
 STYLE_COLOR(workspaceActiveBorder, "#73d4ff")
 
 int StyleTokensBackend::radiusPanel() const { return 28; }
-int StyleTokensBackend::radiusModule() const { return 24; }
+int StyleTokensBackend::radiusModule() const { return 20; }
 int StyleTokensBackend::radiusPrompt() const { return 16; }
 int StyleTokensBackend::radiusButton() const { return 12; }
 int StyleTokensBackend::durationFast() const { return 120; }
 int StyleTokensBackend::durationControl() const { return 130; }
 int StyleTokensBackend::durationQuick() const { return 140; }
-int StyleTokensBackend::durationStandard() const { return 280; }
+int StyleTokensBackend::durationStandard() const { return 240; }
 
 #undef STYLE_COLOR
 #undef STYLE_GLOBAL_COLOR

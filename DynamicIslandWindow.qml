@@ -86,7 +86,66 @@ PanelWindow {
     }
 
     color: StyleTokens.transparent
+    WlrLayershell.namespace: "tide-island"
     anchors { top: true; left: true; right: true }
+    // Blur only the visible material, never the full-width layer surface or
+    // the invisible gesture strip. The input mask remains independent.
+    BackgroundEffect.blurRegion: Region {
+        id: nativeBlurRegion
+
+        Region {
+            item: mainCapsule.opacity > 0.01 && root.userConfig.islandBackgroundOpacity > 0
+                && root.userConfig.islandBackgroundOpacity < 100 ? mainCapsule : null
+            radius: Math.round(mainCapsule.radius * mainCapsule.scale)
+        }
+        Region {
+            item: fileShelfBubble.visible && fileShelfBubble.opacity > 0.01 ? fileShelfBubble : null
+            radius: fileShelfBubble.width / 2
+        }
+        Region {
+            item: wifiConnectivityDetailShell.visible && wifiConnectivityDetailShell.opacity > 0.01
+                ? wifiConnectivityDetailShell.surfaceItem : null
+            radius: Math.round(28 * wifiConnectivityDetailShell.panelScale)
+        }
+        Region {
+            item: bluetoothConnectivityDetailShell.visible && bluetoothConnectivityDetailShell.opacity > 0.01
+                ? bluetoothConnectivityDetailShell.surfaceItem : null
+            radius: Math.round(28 * bluetoothConnectivityDetailShell.panelScale)
+        }
+        Region {
+            item: powerConnectivityDetailShell.visible && powerConnectivityDetailShell.opacity > 0.01
+                ? powerConnectivityDetailShell.surfaceItem : null
+            radius: Math.round(28 * powerConnectivityDetailShell.panelScale)
+        }
+        Region {
+            item: calendarNoteShell.visible && calendarNoteShell.opacity > 0.01
+                ? calendarNoteShell.surfaceItem : null
+            radius: Math.round(28 * calendarNoteShell.panelScale)
+        }
+    }
+
+    // Region tracks item geometry; ancestor transforms also need to invalidate
+    // it while a detail panel is moving or scaling.
+    Connections {
+        target: mainCapsule
+        function onScaleChanged() { nativeBlurRegion.changed(); }
+    }
+    Connections {
+        target: wifiConnectivityDetailShell
+        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
+    }
+    Connections {
+        target: bluetoothConnectivityDetailShell
+        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
+    }
+    Connections {
+        target: powerConnectivityDetailShell
+        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
+    }
+    Connections {
+        target: calendarNoteShell
+        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
+    }
     mask: Region {
         // Input is the union of the island's visible surfaces plus a compact top
         // gesture strip. The gesture strip must not grow with expanded content.
@@ -2071,12 +2130,12 @@ PanelWindow {
         Rectangle {
             id: mainCapsule
             z: 5
-            property int morphDuration: 400
+            property int morphDuration: 280
             readonly property bool notificationHistorySurface: islandContainer.islandState === "notification_center"
-            property real outlineWidth: root.overviewContentVisible || notificationHistorySurface ? 1 : 0
+            property real outlineWidth: 1
             property color outlineColor: root.overviewContentVisible
                 ? root.overviewCapsuleBorderColor
-                : (notificationHistorySurface ? "#1affffff" : StyleTokens.clearBlack)
+                : StyleTokens.surfaceBorder
             property real displayedWidth: baseTargetWidth
             readonly property real baseTargetWidth: {
                 if (root.overviewVisible) return root.overviewCapsuleWidth;
@@ -2165,19 +2224,19 @@ PanelWindow {
 
                 switch (islandContainer.islandState) {
                 case "control_center":
-                    return 34;
+                    return 28;
                 case "notification_center":
-                    return mainCapsule.targetHeight * 36 / 165;
+                    return 28;
                 case "wallpaper_picker":
                 case "application_launcher":
                 case "file_shelf":
                 case "clipboard":
                 case "weather":
                 case "calendar":
-                    return 34;
+                    return 28;
                 case "expanded":
                 case "bluetooth_expanded":
-                    return 40;
+                    return 32;
                 case "notification":
                     return islandContainer.notificationExpanded ? 28 : mainCapsule.targetHeight / 2;
                 default:
@@ -2198,7 +2257,8 @@ PanelWindow {
             )
             color: root.overviewContentVisible
                 ? root.overviewCapsuleColor
-                : (notificationHistorySurface ? "#080808" : Qt.rgba(0, 0, 0, userConfig.islandBackgroundOpacity / 100.0))
+                : Qt.rgba(StyleTokens.panel.r, StyleTokens.panel.g, StyleTokens.panel.b,
+                    userConfig.islandBackgroundOpacity / 100.0)
             y: userConfig.islandTopMargin
                 - (1 - root.autoHideProgress) * (targetHeight + userConfig.islandTopMargin + 8)
             x: parent ? parent.width * userConfig.islandPositionX / 100 - width / 2 : 0
@@ -2243,7 +2303,7 @@ PanelWindow {
                 color: StyleTokens.transparent
                 border.width: 1
                 border.color: StyleTokens.overviewInnerBorder
-                opacity: root.overviewContentVisible ? 1 : 0
+                opacity: 1
 
                 Behavior on opacity {
                     NumberAnimation {
@@ -2754,7 +2814,7 @@ PanelWindow {
                         iconFontFamily: root.iconFontFamily
                         textFontFamily: root.textFontFamily
                         heroFontFamily: root.heroFontFamily
-                        sliderIntroDelay: mainCapsule.morphDuration
+                        sliderIntroDelay: 0
                         currentTime: timeObj.currentTime
                         currentDateLabel: timeObj.currentDateLabel
                         batteryCapacity: islandContainer.batteryCapacity
@@ -3025,9 +3085,9 @@ PanelWindow {
             Rectangle {
                 anchors.fill: parent
                 radius: width / 2
-                color: StyleTokens.black
+                color: Qt.rgba(StyleTokens.panel.r, StyleTokens.panel.g, StyleTokens.panel.b, 0.86)
                 border.width: 1
-                border.color: StyleTokens.inputBorder
+                border.color: StyleTokens.surfaceBorder
 
                 Text {
                     anchors.centerIn: parent

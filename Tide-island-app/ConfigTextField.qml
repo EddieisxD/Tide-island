@@ -10,7 +10,7 @@ Rectangle {
     property alias inputMethodHints: field.inputMethodHints
     property alias validator: field.validator
     property alias field: field
-    property int textPixelSize: 15
+    property int textPixelSize: 13
 
     signal accepted()
     signal editingFinished()

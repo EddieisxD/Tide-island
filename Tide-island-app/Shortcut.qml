@@ -610,7 +610,7 @@ PagePanel {
                 id: pageColumn
 
                 x: 30
-                y: 50
+                y: 32
                 width: Math.max(260, parent.width - 70)
                 spacing: 34
 
@@ -618,15 +618,16 @@ PagePanel {
                     text: "Shortcut"
                     color: Theme.textColor
                     font.family: Theme.titleFontFamily
-                    font.pixelSize: 30
+                    font.pixelSize: 26
+                    font.weight: Font.DemiBold
                 }
 
                 Text {
                     text: "Supported shortcuts"
                     color: Theme.textColor
                     font.family: Theme.titleFontFamily
-                    font.pixelSize: 23
-                    font.weight: Font.Normal
+                    font.pixelSize: 15
+                    font.weight: Font.DemiBold
                 }
 
                 Text {
@@ -860,7 +861,8 @@ PagePanel {
                     color: Theme.textColor
                     elide: Text.ElideRight
                     font.family: Theme.titleFontFamily
-                    font.pixelSize: 23
+                    font.pixelSize: 15
+                    font.weight: Font.DemiBold
                 }
 
                 Rectangle {

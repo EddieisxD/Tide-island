@@ -253,6 +253,20 @@ tide-island-config-app
 - **Weather**: Configure auto-detection or custom city name, temperature units (°C or °F), and refresh interval.
 - **Calendar**: Quick month view with week numbers and relative date indicators. Click the date in the Control Center, press `Super + K`, or use the scroll wheel / arrow keys to browse months. Press `Home` to return to today, and `Esc` to close.
 
+### Frosted materials
+
+The island, connectivity panels, and calendar notes use a shared translucent
+material. **General → Island Appearance → Background Transparency** controls the
+island's opacity; use 100 for a solid background. Settings includes both light
+and dark appearances.
+
+Native background blur uses Quickshell 0.3+'s
+[BackgroundEffect](https://quickshell.org/docs/v0.3.0/types/Quickshell.Wayland/BackgroundEffect/)
+and requires a compositor with `ext-background-effect-v1` support. Rounded blur
+regions follow the visible panels during transitions and disappear when panels
+close. Compositors without the protocol display the tinted surfaces without
+blur. The layer-shell namespace is `tide-island`.
+
 
 ## Spotify favorites
 

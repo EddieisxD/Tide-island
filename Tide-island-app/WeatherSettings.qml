@@ -8,7 +8,7 @@ Rectangle {
     property int revision: 0
 
     color: Theme.cardBgColor
-    radius: 16
+    radius: 12
     border.width: 1
     border.color: Theme.splitLineColor
     implicitHeight: weatherColumn.implicitHeight + 36
@@ -50,14 +50,14 @@ Rectangle {
                 Text {
                     text: "Enable Weather"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     color: Theme.textColor
                 }
 
                 Text {
                     text: "Display real-time weather and 3-day forecast in Island and Control Center"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     color: Theme.subtleTextColor
                 }
             }
@@ -91,14 +91,14 @@ Rectangle {
                 Text {
                     text: "Location"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     color: Theme.textColor
                 }
 
                 Text {
                     text: "City or region name. Leave empty for automatic IP-based location"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     color: Theme.subtleTextColor
                 }
             }
@@ -141,14 +141,14 @@ Rectangle {
                 Text {
                     text: "Temperature Units"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     color: Theme.textColor
                 }
 
                 Text {
                     text: "Choose Celsius (°C, km/h) or Fahrenheit (°F, mph)"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     color: Theme.subtleTextColor
                 }
             }
@@ -224,14 +224,14 @@ Rectangle {
                 Text {
                     text: "Refresh Interval"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     color: Theme.textColor
                 }
 
                 Text {
                     text: "How often to check for weather updates from wttr.in"
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 14
+                    font.pixelSize: 12
                     color: Theme.subtleTextColor
                 }
             }
