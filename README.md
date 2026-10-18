@@ -258,7 +258,9 @@ tide-island-config-app
 The island, connectivity panels, and calendar notes use a shared translucent
 material. **General → Island Appearance → Background Transparency** controls the
 island's opacity; use 100 for a solid background. Settings includes both light
-and dark appearances.
+and dark appearances. **Background Blur** independently enables or disables
+blur for the island and all detail panels, and takes effect immediately.
+Defaults are opacity **60** and blur **enabled** (`islandBlurEnabled: true`).
 
 Native background blur uses Quickshell 0.3+'s
 [BackgroundEffect](https://quickshell.org/docs/v0.3.0/types/Quickshell.Wayland/BackgroundEffect/)

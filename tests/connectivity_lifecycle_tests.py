@@ -47,6 +47,9 @@ def main():
                 XDG_CACHE_HOME=str(directory / "cache"), XDG_STATE_HOME=str(directory / "state"),
                 QT_QUICK_CONTROLS_STYLE="Basic",
             )
+            settings = directory / "config" / "tide-island"
+            settings.mkdir(parents=True)
+            (settings / "userconfig.json").write_text("{}")
             fixture = directory / "fixture"
             fixture.mkdir()
             shutil.copy2(root / "DynamicIslandWindow.qml", fixture)

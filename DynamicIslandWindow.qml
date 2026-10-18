@@ -90,7 +90,9 @@ PanelWindow {
     anchors { top: true; left: true; right: true }
     // Blur only the visible material, never the full-width layer surface or
     // the invisible gesture strip. The input mask remains independent.
-    BackgroundEffect.blurRegion: Region {
+    BackgroundEffect.blurRegion: root.userConfig.islandBlurEnabled ? nativeBlurRegion : null
+
+    readonly property Region nativeBlurRegions: Region {
         id: nativeBlurRegion
 
         Region {

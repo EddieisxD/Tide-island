@@ -253,7 +253,9 @@ tide-island-config-app
 
 灵动岛、网络与蓝牙详情、日历便笺使用统一的半透明材质。在设置的
 **General → Island Appearance → Background Transparency** 中调整岛的背景不透明度，
-设为 100 可使用实色背景。设置窗口支持浅色和深色外观。
+设为 100 可使用实色背景。**Background Blur** 开关统一控制岛和所有详情面板的模糊，
+修改后立即生效。默认不透明度为 **60**，模糊**开启**（`islandBlurEnabled: true`）。
+设置窗口支持浅色和深色外观。
 
 原生背景模糊使用 Quickshell 0.3+ 的
 [BackgroundEffect](https://quickshell.org/docs/v0.3.0/types/Quickshell.Wayland/BackgroundEffect/)，

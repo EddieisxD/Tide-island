@@ -20,6 +20,38 @@ bool writeConfig(const QString &home, const QByteArray &contents) {
 class UserConfigBackendTests : public QObject {
     Q_OBJECT
 private slots:
+    void blurDefaultsAndLiveReloadPreserveOpacity() {
+        QTemporaryDir directory;
+        QVERIFY(directory.isValid());
+        qputenv("XDG_CONFIG_HOME", directory.path().toUtf8());
+        QVERIFY(writeConfig(directory.path(), "{}"));
+        UserConfigBackend runtime;
+        QVERIFY(runtime.islandBlurEnabled());
+        QCOMPARE(runtime.islandBackgroundOpacity(), 60);
+        QSignalSpy changed(&runtime, &UserConfigBackend::islandBlurEnabledChanged);
+
+        Backend settings;
+        auto config = settings.userConfig();
+        config.insert("islandBlurEnabled", false);
+        config.insert("islandBackgroundOpacity", 60);
+        QVERIFY(settings.save(config));
+        runtime.reload();
+        QVERIFY(!runtime.islandBlurEnabled());
+        QCOMPARE(runtime.islandBackgroundOpacity(), 60);
+        QCOMPARE(changed.count(), 1);
+
+        config.insert("islandBlurEnabled", true);
+        QVERIFY(settings.save(config));
+        runtime.reload();
+        QVERIFY(runtime.islandBlurEnabled());
+        QCOMPARE(runtime.islandBackgroundOpacity(), 60);
+        QCOMPARE(changed.count(), 2);
+
+        QVERIFY(writeConfig(directory.path(), "{\"islandBlurEnabled\":\"false\"}"));
+        runtime.reload();
+        QVERIFY(runtime.islandBlurEnabled());
+    }
+
     void stringsAndCommentsMatchAcrossBothConsumers_data() {
         QTest::addColumn<QByteArray>("input");
         QTest::addColumn<QString>("command");

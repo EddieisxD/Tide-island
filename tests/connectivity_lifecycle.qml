@@ -1,11 +1,19 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Io
+import IslandBackend
 
 ShellRoot {
     id: test
     property int step: 0
     property int checks: 0
+
+    FileView {
+        id: blurConfig
+        path: UserConfig.userConfigPath
+        blockWrites: true
+    }
 
     function check(value, message) {
         if (!value) {
@@ -54,6 +62,16 @@ ShellRoot {
                         "open detail has a rounded native blur region " + index)) return;
                 }
                 if (!test.check(center.scale === 1, "control center reaches full scale")) return;
+                blurConfig.setText('{"islandBlurEnabled":false}');
+                UserConfig.reload();
+                if (!test.check(!UserConfig.islandBlurEnabled && island.BackgroundEffect.blurRegion === null,
+                    "disabling blur removes the entire effect including open detail panels")) return;
+                if (!test.check(UserConfig.islandBackgroundOpacity === 60,
+                    "blur preference does not change default opacity")) return;
+                blurConfig.setText('{"islandBlurEnabled":true}');
+                UserConfig.reload();
+                if (!test.check(UserConfig.islandBlurEnabled && island.BackgroundEffect.blurRegion === blur,
+                    "reenabling blur restores visible regions without reopening panels")) return;
                 island.toggleControlCenterWindow();
                 if (!test.check(!island.wifiConnectivityDetailOpen && !island.bluetoothConnectivityDetailOpen && !island.powerConnectivityDetailOpen, "detail shells close immediately")) return;
                 if (!test.check(!center.wifiPanelOpen && !center.bluetoothPanelOpen && !center.powerPanelOpen, "provider clears panel state")) return;
