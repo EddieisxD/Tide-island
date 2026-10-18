@@ -57,7 +57,7 @@ optdepends=(
 conflicts=('tide-island-git')
 install='tide-island.install'
 source=("$pkgname-$pkgver.tar.xz::https://github.com/enhaoswen/Tide-island/releases/download/$pkgver/tide-island-source.tar.xz")
-sha256sums=('ae06a00f0e6eab26c0e144f5d387b744c31caa05b2ab57a3285a5d9b9ab378a0')
+sha256sums=('c1b2703c4ca36d00eaeb3a813571a4de78d09dbff8629fff32a8acffd0bce746')
 
 build() {
   cmake -S "$_srcdir" -B "$_builddir" \
