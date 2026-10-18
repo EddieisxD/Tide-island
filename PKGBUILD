@@ -1,7 +1,7 @@
 # Maintainer: Swen <enhaoswen@gmail.com>
 # Contributor: whysooraj <whysooraj.official@gmail.com>
 pkgname=tide-island
-pkgver=1.0.43
+pkgver=1.0.44
 pkgrel=1
 _srcdir=Tide-island-$pkgver
 _builddir=build-$pkgver
@@ -27,7 +27,7 @@ depends=(
     'upower'
     'bluez'
     'bluez-utils'
-    'quickshell'
+    'quickshell>=0.3.0'
     'cliphist'
     'wl-clipboard'
 )

@@ -37,10 +37,9 @@ PagePanel {
                 font.family: Theme.titleFontFamily
                 text: "Wallpaper"
                 color: Theme.textColor
-                font.pixelSize: 26
-                font.weight: Font.DemiBold
-                x: 32
-                y: 32
+                font.pixelSize: 30
+                x: 60
+                y: 50
             }
 
             Wallpaper {
@@ -48,9 +47,9 @@ PagePanel {
                 anchors.top: title.bottom
                 anchors.topMargin: 40
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: implicitHeight
             }
         }

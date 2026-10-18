@@ -66,10 +66,9 @@ PagePanel {
                 font.family: Theme.titleFontFamily
                 text: "Font"
                 color: Theme.textColor
-                font.pixelSize: 26
-                font.weight: Font.DemiBold
-                x: 32
-                y: 32
+                font.pixelSize: 30
+                x: 60
+                y: 50
             }
 
             Text {
@@ -80,26 +79,25 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
                 color: Theme.textColor
             }
 
             Rectangle {
                 id: fontPanel
                 color: Theme.cardBgColor
-                radius: 12
+                radius: 16
                 border.width: 1
                 border.color: Theme.splitLineColor
 
                 anchors.top: fontTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: fontColumn.height + 30
 
                 Column {
@@ -212,7 +210,7 @@ PagePanel {
             id: rowTitle
             text: row.title
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
             color: Theme.textColor
             anchors.top: parent.top
             anchors.left: parent.left
@@ -221,10 +219,7 @@ PagePanel {
         Text {
             text: row.description
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
-            anchors.right: field.left
-            anchors.rightMargin: 18
-            wrapMode: Text.Wrap
+            font.pixelSize: 14
             anchors.top: rowTitle.bottom
             anchors.topMargin: 5
             anchors.left: rowTitle.left

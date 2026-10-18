@@ -57,40 +57,38 @@ PagePanel {
                 font.family: Theme.titleFontFamily
                 text: "General"
                 color: Theme.textColor
-                font.pixelSize: 26
-                font.weight: Font.DemiBold
-                x: 32
-                y: 32
+                font.pixelSize: 30
+                x: 60
+                y: 50
             }
 
             Text {
                 id: apperanceTitle
-                text: "Island Appearance"
+                text: "Island apperance"
                 anchors.top: title.bottom
                 anchors.topMargin: 34
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
                 color: Theme.textColor
             }
 
             Rectangle {
                 id: apperance
                 color: Theme.cardBgColor
-                radius: 12
+                radius: 16
                 border.width: 1
                 border.color: Theme.splitLineColor
 
                 anchors.top: apperanceTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: apperanceColumn.implicitHeight + 36
 
                 Column {
@@ -128,7 +126,7 @@ PagePanel {
 
                     ConfigRow {
                         title: "Background Transparency"
-                        description: "Frosted glass opacity · 0% transparent, 100% solid"
+                        description: "Opacity of the island background (0 = fully transparent, 100 = solid)"
                         keyName: "islandBackgroundOpacity"
                         fallbackText: "60"
                         numeric: true
@@ -258,10 +256,9 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
                 color: Theme.textColor
             }
 
@@ -270,9 +267,9 @@ PagePanel {
                 anchors.top: customPageTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: implicitHeight
             }
 
@@ -284,10 +281,9 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
                 color: Theme.textColor
             }
 
@@ -296,9 +292,9 @@ PagePanel {
                 anchors.top: tlpTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: implicitHeight
             }
 
@@ -310,10 +306,9 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
                 color: Theme.textColor
             }
 
@@ -322,9 +317,9 @@ PagePanel {
                 anchors.top: weatherTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: implicitHeight
             }
 
@@ -353,7 +348,7 @@ PagePanel {
             id: rowTitle
             text: row.title
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
             color: Theme.textColor
             anchors.top: parent.top
             anchors.left: parent.left
@@ -362,10 +357,7 @@ PagePanel {
         Text {
             text: row.description
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
-            anchors.right: field.left
-            anchors.rightMargin: 18
-            wrapMode: Text.Wrap
+            font.pixelSize: 14
             anchors.top: rowTitle.bottom
             anchors.topMargin: 5
             anchors.left: rowTitle.left
@@ -414,7 +406,7 @@ PagePanel {
             id: clockTitle
             text: "Clock Format"
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
             color: Theme.textColor
             anchors.top: parent.top
             anchors.left: parent.left

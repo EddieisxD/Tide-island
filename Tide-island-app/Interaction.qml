@@ -205,12 +205,11 @@ PagePanel {
                 id: title
 
                 text: "Interaction"
-                x: 32
-                y: 32
+                x: 60
+                y: 50
                 color: Theme.textColor
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 26
-                font.weight: Font.DemiBold
+                font.pixelSize: 30
             }
 
             Text {
@@ -222,26 +221,25 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 color: Theme.textColor
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
             }
 
             Rectangle {
                 id: clickPanel
 
                 color: Theme.cardBgColor
-                radius: 12
+                radius: 16
                 border.width: 1
                 border.color: Theme.splitLineColor
                 anchors.top: clickTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: clickColumn.implicitHeight + 30
 
                 Column {
@@ -294,26 +292,25 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 color: Theme.textColor
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
             }
 
             Rectangle {
                 id: hoverPanel
 
                 color: Theme.cardBgColor
-                radius: 12
+                radius: 16
                 border.width: 1
                 border.color: Theme.splitLineColor
                 anchors.top: hoverTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: hoverColumn.implicitHeight + 30
 
                 Column {
@@ -358,26 +355,25 @@ PagePanel {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 color: Theme.textColor
                 font.family: Theme.titleFontFamily
-                font.pixelSize: 15
-                font.weight: Font.DemiBold
+                font.pixelSize: 23
             }
 
             Rectangle {
                 id: playerPanel
 
                 color: Theme.cardBgColor
-                radius: 12
+                radius: 16
                 border.width: 1
                 border.color: Theme.splitLineColor
                 anchors.top: playerTitle.bottom
                 anchors.topMargin: 15
                 anchors.left: parent.left
-                anchors.leftMargin: 32
+                anchors.leftMargin: 30
                 anchors.right: parent.right
-                anchors.rightMargin: 32
+                anchors.rightMargin: 40
                 height: playerColumn.implicitHeight + 30
 
                 Column {
@@ -421,7 +417,7 @@ PagePanel {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
         }
 
         Text {
@@ -431,11 +427,9 @@ PagePanel {
             anchors.topMargin: 5
             width: Math.max(80, parent.width - buttonGroup.width - 28)
             color: Theme.subtleTextColor
-            wrapMode: Text.Wrap
-            maximumLineCount: 2
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
+            font.pixelSize: 14
         }
 
         ButtonGroup {
@@ -465,7 +459,7 @@ PagePanel {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
         }
 
         Text {
@@ -475,11 +469,9 @@ PagePanel {
             anchors.topMargin: 5
             width: Math.max(80, parent.width - hoverGroup.width - 28)
             color: Theme.subtleTextColor
-            wrapMode: Text.Wrap
-            maximumLineCount: 2
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
+            font.pixelSize: 14
         }
 
         ButtonGroup {
@@ -509,7 +501,7 @@ PagePanel {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
         }
 
         Text {
@@ -519,11 +511,9 @@ PagePanel {
             anchors.topMargin: 5
             width: Math.max(80, parent.width - autoExpandSwitch.width - 28)
             color: Theme.subtleTextColor
-            wrapMode: Text.Wrap
-            maximumLineCount: 2
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
+            font.pixelSize: 14
         }
 
         StyledSwitch {
@@ -552,7 +542,7 @@ PagePanel {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
         }
 
         Text {
@@ -562,11 +552,9 @@ PagePanel {
             anchors.topMargin: 5
             width: Math.max(80, parent.width - autoHideSwitch.width - 28)
             color: Theme.subtleTextColor
-            wrapMode: Text.Wrap
-            maximumLineCount: 2
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
+            font.pixelSize: 14
         }
 
         StyledSwitch {
@@ -607,8 +595,6 @@ component ShowWorkspaceAutoHideRow: Item {
             anchors.topMargin: 5
             width: Math.max(80, parent.width - workspaceSwitch.width - 52)
             color: Theme.subtleTextColor
-            wrapMode: Text.Wrap
-            maximumLineCount: 2
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
             font.pixelSize: 13
@@ -641,7 +627,7 @@ component ShowWorkspaceAutoHideRow: Item {
             anchors.top: parent.top
             color: Theme.textColor
             font.family: Theme.textFontFamily
-            font.pixelSize: 14
+            font.pixelSize: 18
         }
 
         Text {
@@ -651,11 +637,9 @@ component ShowWorkspaceAutoHideRow: Item {
             anchors.topMargin: 5
             width: Math.max(80, parent.width - delayControls.width - 28)
             color: Theme.subtleTextColor
-            wrapMode: Text.Wrap
-            maximumLineCount: 2
             elide: Text.ElideRight
             font.family: Theme.textFontFamily
-            font.pixelSize: 12
+            font.pixelSize: 14
         }
 
         Row {
@@ -690,7 +674,7 @@ component ShowWorkspaceAutoHideRow: Item {
                 text: "s"
                 color: Theme.subtleTextColor
                 font.family: Theme.textFontFamily
-                font.pixelSize: 12
+                font.pixelSize: 14
             }
         }
 
@@ -797,7 +781,7 @@ component ShowWorkspaceAutoHideRow: Item {
                     text: modelData.label
                     color: option.selectedState ? Theme.textColor : Theme.secondaryTextColor
                     font.family: Theme.textFontFamily
-                    font.pixelSize: 12
+                    font.pixelSize: 14
                     font.weight: option.selectedState ? Font.DemiBold : Font.Normal
                 }
 
