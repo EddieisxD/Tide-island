@@ -262,6 +262,18 @@ tide-island-config-app
 需要合成器支持 `ext-background-effect-v1` 协议。模糊区域会跟随可见面板的圆角和动画，
 面板关闭后移除；不支持该协议时显示半透明着色背景。Layer-shell 命名空间为 `tide-island`。
 
+模糊区域向内对齐，外沿保留浅色细描边与抗锯齿。Tide 已自行处理展开动画；
+Hyprland 的窗口层动画可能再次缩放整个面板，使文字与模糊轮廓错位。使用 Lua 配置时，
+可仅为 Tide 关闭这层动画：
+
+```lua
+hl.layer_rule({
+    name = "tide-island-native-morph",
+    match = { namespace = "^tide-island$" },
+    no_anim = true,
+})
+```
+
 ## Spotify 收藏
 
 音乐播放器支持把当前歌曲加入／移出 Spotify 的「已喜欢歌曲」，并同步客户端中的收藏状态。

@@ -269,6 +269,20 @@ regions follow the visible panels during transitions and disappear when panels
 close. Compositors without the protocol display the tinted surfaces without
 blur. The layer-shell namespace is `tide-island`.
 
+Blur regions align inside the antialiased surface with a fine, light outline.
+Tide animates its own panels. Hyprland's layer
+animations can additionally scale the entire surface, stretching text and
+misaligning blur during resizing. With a Lua config, disable that extra animation
+only for Tide:
+
+```lua
+hl.layer_rule({
+    name = "tide-island-native-morph",
+    match = { namespace = "^tide-island$" },
+    no_anim = true,
+})
+```
+
 
 ## Spotify favorites
 

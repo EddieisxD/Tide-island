@@ -95,59 +95,46 @@ PanelWindow {
     readonly property Region nativeBlurRegions: Region {
         id: nativeBlurRegion
 
-        Region {
-            item: mainCapsule.opacity > 0.01 && root.userConfig.islandBackgroundOpacity > 0
-                && root.userConfig.islandBackgroundOpacity < 100 ? mainCapsule : null
-            radius: Math.round(mainCapsule.radius * mainCapsule.scale)
+        InsetBlurRegion {
+            surface: mainCapsule
+            active: mainCapsule.opacity > 0.01 && root.userConfig.islandBackgroundOpacity > 0
+                && root.userConfig.islandBackgroundOpacity < 100
+            surfaceRadius: mainCapsule.radius
         }
-        Region {
-            item: fileShelfBubble.visible && fileShelfBubble.opacity > 0.01 ? fileShelfBubble : null
-            radius: fileShelfBubble.width / 2
+        InsetBlurRegion {
+            surface: fileShelfBubble
+            active: fileShelfBubble.visible && fileShelfBubble.opacity > 0.01
+            surfaceRadius: fileShelfBubble.width / 2
         }
-        Region {
-            item: wifiConnectivityDetailShell.visible && wifiConnectivityDetailShell.opacity > 0.01
-                ? wifiConnectivityDetailShell.surfaceItem : null
-            radius: Math.round(28 * wifiConnectivityDetailShell.panelScale)
+        InsetBlurRegion {
+            surface: wifiConnectivityDetailShell.surfaceItem
+            active: wifiConnectivityDetailShell.visible && wifiConnectivityDetailShell.opacity > 0.01
+            surfaceRadius: 28
+            transformDependencies: [wifiConnectivityDetailShell.x, wifiConnectivityDetailShell.y,
+                wifiConnectivityDetailShell.panelScale, mainCapsule.height]
         }
-        Region {
-            item: bluetoothConnectivityDetailShell.visible && bluetoothConnectivityDetailShell.opacity > 0.01
-                ? bluetoothConnectivityDetailShell.surfaceItem : null
-            radius: Math.round(28 * bluetoothConnectivityDetailShell.panelScale)
+        InsetBlurRegion {
+            surface: bluetoothConnectivityDetailShell.surfaceItem
+            active: bluetoothConnectivityDetailShell.visible && bluetoothConnectivityDetailShell.opacity > 0.01
+            surfaceRadius: 28
+            transformDependencies: [bluetoothConnectivityDetailShell.x, bluetoothConnectivityDetailShell.y,
+                bluetoothConnectivityDetailShell.panelScale, mainCapsule.height]
         }
-        Region {
-            item: powerConnectivityDetailShell.visible && powerConnectivityDetailShell.opacity > 0.01
-                ? powerConnectivityDetailShell.surfaceItem : null
-            radius: Math.round(28 * powerConnectivityDetailShell.panelScale)
+        InsetBlurRegion {
+            surface: powerConnectivityDetailShell.surfaceItem
+            active: powerConnectivityDetailShell.visible && powerConnectivityDetailShell.opacity > 0.01
+            surfaceRadius: 28
+            transformDependencies: [powerConnectivityDetailShell.x, powerConnectivityDetailShell.y,
+                powerConnectivityDetailShell.panelScale, mainCapsule.height]
         }
-        Region {
-            item: calendarNoteShell.visible && calendarNoteShell.opacity > 0.01
-                ? calendarNoteShell.surfaceItem : null
-            radius: Math.round(28 * calendarNoteShell.panelScale)
+        InsetBlurRegion {
+            surface: calendarNoteShell.surfaceItem
+            active: calendarNoteShell.visible && calendarNoteShell.opacity > 0.01
+            surfaceRadius: 28
+            transformDependencies: [calendarNoteShell.x, calendarNoteShell.y, calendarNoteShell.panelScale]
         }
     }
 
-    // Region tracks item geometry; ancestor transforms also need to invalidate
-    // it while a detail panel is moving or scaling.
-    Connections {
-        target: mainCapsule
-        function onScaleChanged() { nativeBlurRegion.changed(); }
-    }
-    Connections {
-        target: wifiConnectivityDetailShell
-        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
-    }
-    Connections {
-        target: bluetoothConnectivityDetailShell
-        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
-    }
-    Connections {
-        target: powerConnectivityDetailShell
-        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
-    }
-    Connections {
-        target: calendarNoteShell
-        function onRevealProgressChanged() { nativeBlurRegion.changed(); }
-    }
     mask: Region {
         // Input is the union of the island's visible surfaces plus a compact top
         // gesture strip. The gesture strip must not grow with expanded content.
@@ -2298,21 +2285,16 @@ PanelWindow {
             border.width: outlineWidth
             border.color: outlineColor
 
+            antialiasing: true
+
             Rectangle {
                 anchors.fill: parent
                 anchors.margins: 1
-                radius: Math.max(parent.radius - 1, 0)
+                radius: Math.max(mainCapsule.radius - 1, 0)
                 color: StyleTokens.transparent
                 border.width: 1
                 border.color: StyleTokens.overviewInnerBorder
-                opacity: 1
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: root.overviewContentVisible ? 260 : 140
-                        easing.type: Easing.InOutQuad
-                    }
-                }
+                antialiasing: true
             }
 
 
@@ -3091,6 +3073,7 @@ PanelWindow {
                 border.width: 1
                 border.color: StyleTokens.surfaceBorder
 
+                antialiasing: true
                 Text {
                     anchors.centerIn: parent
                     anchors.horizontalCenterOffset: -1
