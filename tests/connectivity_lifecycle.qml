@@ -45,10 +45,66 @@ ShellRoot {
             && y >= region.y && y < region.y + region.height;
         for (const child of region.regions) {
             const covered = containsBlurPixel(child, x, y);
-            inside = child.intersection === Intersection.Subtract
-                ? inside && !covered : inside || covered;
+            if (child.intersection === Intersection.Subtract)
+                inside = inside && !covered;
+            else if (child.intersection === Intersection.Intersect)
+                inside = inside && covered;
+            else if (child.intersection === Intersection.Xor)
+                inside = inside !== covered;
+            else
+                inside = inside || covered;
         }
         return inside;
+    }
+
+    function checkAutoHideBlur() {
+        const blur = island.BackgroundEffect.blurRegion;
+        const capsuleBlur = blur.regions[0];
+        const capsule = capsuleBlur.surface;
+        const originalProgress = island.autoHideProgress;
+        // Keep opacity above the blur cutoff after the capsule has left the
+        // window. A nonempty offscreen region can make Hyprland blur the whole
+        // layer when its renderer clips that region down to nothing.
+        for (const progress of [1, 0.5, 0.05, 0, 0.05, 0.5, 1]) {
+            hideStep.value = progress;
+            hideStep.start();
+            for (let index = 0; index < 6; index++)
+                blur.regions[index].updateGeometry();
+            const start = capsule.mapToItem(null, 0, 0);
+            const end = capsule.mapToItem(null, capsule.width, capsule.height);
+            const centerX = Math.floor((start.x + end.x) / 2);
+            const centerY = Math.floor((start.y + end.y) / 2);
+            if (progress === 0.05) {
+                if (!check(capsuleBlur.active && end.y < 0,
+                    "hide regression samples an active blur entirely above the window")) return false;
+                if (!check(!containsBlurPixel(blur, centerX, centerY),
+                    "hidden capsule submits no offscreen blur pixels")) return false;
+            } else if (progress === 0.5) {
+                if (!check(start.y < 0 && end.y > 2,
+                    "hide regression samples a capsule crossing the top edge")) return false;
+                if (!check(!containsBlurPixel(blur, centerX, -1)
+                    && containsBlurPixel(blur, centerX, 0),
+                    "partial hide retains blur only inside the window")) return false;
+            } else if (progress === 1) {
+                if (!check(containsBlurPixel(blur, centerX, centerY),
+                    "show restores the visible capsule blur")) return false;
+            } else if (!check(!capsuleBlur.active && capsuleBlur.width === 0
+                && capsuleBlur.height === 0, "fully hidden capsule clears blur")) return false;
+            if (!check(!containsBlurPixel(blur, 0, 0)
+                && !containsBlurPixel(blur, island.width - 1, 0),
+                "hide never blurs the full-width gesture strip")) return false;
+        }
+        hideStep.value = originalProgress;
+        hideStep.start();
+        return true;
+    }
+
+    // PropertyAction samples exact animation frames without starting the
+    // property's normal Behavior or replacing its visibility binding.
+    PropertyAction {
+        id: hideStep
+        target: island
+        property: "autoHideProgress"
     }
 
     function checkBlurCorners(region) {
@@ -102,6 +158,8 @@ ShellRoot {
     DynamicIslandWindow {
         id: island
         screen: Quickshell.screens[0]
+        // An unmapped layer window otherwise has no configured output width.
+        implicitWidth: 1280
         visible: false
     }
 
@@ -135,12 +193,14 @@ ShellRoot {
                 if (!test.check(fractionalBlur.width === 0 && fractionalBlur.height === 0 && fractionalBlur.regions.length === 0,
                     "inactive blur has no residual area")) return;
                 const blur = island.BackgroundEffect.blurRegion;
-                if (!test.check(blur !== null && blur.regions.length === 6, "native blur covers only the six material surfaces")) return;
+                if (!test.check(blur !== null && blur.regions.length === 7,
+                    "native blur combines six material surfaces and a window clip")) return;
                 if (!test.check(blur.width === 0 && blur.height === 0, "native blur has no full-window base region")) return;
                 const capsule = blur.regions[0].surface;
                 if (!test.check(island.autoHideProgress > 0.01
                     ? capsule !== null && capsule.width > capsule.height && blur.regions[0].roundedRadius > 0
                     : !blur.regions[0].active, "resting blur follows capsule visibility")) return;
+                if (!test.checkAutoHideBlur()) return;
                 island.toggleControlCenterWindow();
             } else if (test.step === 1) {
                 if (!test.check(island.controlCenterRef !== null, "control center loaded")) return;

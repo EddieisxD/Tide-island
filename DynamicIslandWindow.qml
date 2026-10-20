@@ -133,6 +133,15 @@ PanelWindow {
             surfaceRadius: 28
             transformDependencies: [calendarNoteShell.x, calendarNoteShell.y, calendarNoteShell.panelScale]
         }
+        // Clip the completed union before sending it to the compositor. During
+        // auto-hide the capsule leaves the window before its opacity reaches
+        // zero. Hyprland can treat a nonempty, wholly offscreen blur region as
+        // unrestricted blur after clipping it, flashing the full layer surface.
+        Region {
+            intersection: Intersection.Intersect
+            width: root.width
+            height: root.height
+        }
     }
 
     mask: Region {
