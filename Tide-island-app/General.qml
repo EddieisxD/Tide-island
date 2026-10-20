@@ -139,26 +139,27 @@ PagePanel {
 
                     Item {
                         width: parent.width
-                        height: 49
+                        height: Math.max(49, blurLabels.implicitHeight)
 
                         Column {
+                            id: blurLabels
                             anchors.left: parent.left
                             anchors.right: blurSwitch.left
                             anchors.rightMargin: 18
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.top: parent.top
                             spacing: 5
 
                             Text {
                                 text: "Background Blur"
                                 font.family: Theme.textFontFamily
-                                font.pixelSize: 14
+                                font.pixelSize: 18
                                 color: Theme.textColor
                             }
                             Text {
                                 width: parent.width
                                 text: "Blur behind the island and all detail panels"
                                 font.family: Theme.textFontFamily
-                                font.pixelSize: 12
+                                font.pixelSize: 14
                                 color: Theme.subtleTextColor
                                 wrapMode: Text.Wrap
                             }
