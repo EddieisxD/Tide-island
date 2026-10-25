@@ -28,8 +28,6 @@
   <a href="#configuration">Configuration</a>
   ·
   <a href="#common-commands">Common Commands</a>
-  ·
-  <a href="#notification-centre">Notification Centre</a>
 </p>
 
 ---
@@ -154,7 +152,6 @@ Click a date in the calendar to write a note. Dates with notes show a small dot;
 
 - Hyprland: full current experience, including Tide's workspace overview, workspace animations, shortcuts, and Night Light through `hyprsunset`.
 - niri: island views, focused-output IPC commands, workspace change hints, native niri overview, shortcuts through `~/.config/tide-island/niri-shortcuts.kdl`, and Night Light through `gammastep`.
-- Tide checks `TIDE_ISLAND_COMPOSITOR` first, then `$XDG_CURRENT_DESKTOP`. It uses `$NIRI_SOCKET` only when the desktop environment is inconclusive, then falls back to Hyprland. This prevents inherited compositor sockets from causing a false detection.
 
 <br>
 
@@ -194,10 +191,6 @@ For other distributions, install the dependencies manually and run:
 ```bash
 ./install.sh --skip-deps
 ```
-
-Quickshell is used from `/usr/bin/quickshell` when available. Otherwise the
-installer builds the pinned, verified Quickshell version compatible with this
-release. Qt 6.6 or newer is required.
 
 This source installer targets conventional Linux systems with a writable
 `/usr`. Declarative or immutable systems such as NixOS and Fedora Silverblue
@@ -248,23 +241,9 @@ Search `Tide Island Settings` in any application launcher, or run:
 tide-island-config-app
 ```
 
-- **Shortcuts**: Configure shortcuts for Workspace Overview, Application Launcher, Music Player, Notification Center, Control Center, Clipboard History (`Super + V`), Weather (`Super + E`), and Calendar (`Super + K` by default).
-- **Interaction**: Configure click actions for the dynamic island pill (Left, Middle, and Right mouse buttons for Player, Control Center, and Clipboard History).
-- **Weather**: Configure auto-detection or custom city name, temperature units (°C or °F), and refresh interval.
-- **Calendar**: Quick month view with week numbers and relative date indicators. Click the date in the Control Center, press `Super + K`, or use the scroll wheel / arrow keys to browse months. Press `Home` to return to today, and `Esc` to close.
-
 ### Lock screen
 
 With Tide Island running, open **Settings → Lock screen** and click **Lock now**, or use the lock button in the control center's power menu. To enable the shortcut, apply **Lock screen** on the **Shortcut** page (default `Super + L`).
-
-### Frosted materials
-
-The island, connectivity panels, and calendar notes use a shared translucent
-material. **General → Island Appearance → Background Transparency** controls the
-island's opacity; use 100 for a solid background. Settings includes both light
-and dark appearances. **Background Blur** independently enables or disables
-blur for the island and all detail panels, and takes effect immediately.
-Defaults are opacity **60** and blur **enabled** (`islandBlurEnabled: true`).
 
 Native background blur uses Quickshell 0.3+'s
 [BackgroundEffect](https://quickshell.org/docs/v0.3.0/types/Quickshell.Wayland/BackgroundEffect/)
@@ -288,7 +267,7 @@ hl.layer_rule({
 ```
 
 
-## Spotify favorites
+### Spotify favorites
 
 The expanded music player can add or remove the current Spotify track from Liked Songs and reflect changes made in the Spotify client.
 It uses your local Spotify desktop client and [Spicetify](https://spicetify.app/docs/getting-started), without a Spotify developer application, API key, browser automation, or hosted server. There is no developer-application user allowlist, and saving tracks uses your signed-in account's normal library permissions without requiring Premium for this feature.
@@ -364,12 +343,6 @@ You can control Tide Island remotely using `quickshell ipc call`:
 | `quickshell ipc call tide openNotificationCenter` | Open notification center |
 | `quickshell ipc call tide closeNotificationCenter` | Close notification center |
 | `quickshell ipc call tide toggleApplicationLauncher` | Open or close application launcher |
-
-<br>
-
-### Notification Centre
-
-Click the × button on a notification card to dismiss it. Use **Clear All** to dismiss all notifications at once.
 
 <br>
 

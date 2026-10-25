@@ -32,8 +32,6 @@
   <a href="#配置">配置</a>
   ·
   <a href="#常用命令">常用命令</a>
-  ·
-  <a href="#清除通知">通知中心</a>
 </p>
 
 ---
@@ -155,7 +153,6 @@ Tide Island 是一款面向 Hyprland 和 niri 的小型桌面组件，采用类�
 
 - Hyprland：提供完整的现有体验，包括 Tide 的工作区总览、工作区动画、快捷键，以及通过 `hyprsunset` 实现的 Night Light（夜间色温调节）。
 - niri：支持灵动岛视图、基于当前聚焦输出的 IPC 命令、工作区切换提示、niri 原生总览、通过 `~/.config/tide-island/niri-shortcuts.kdl` 配置快捷键，以及通过 `gammastep` 实现的 Night Light（夜间色温调节）。
-- Tide 会优先检查 `TIDE_ISLAND_COMPOSITOR`，随后检查 `$XDG_CURRENT_DESKTOP`。只有在无法通过桌面环境确定合成器时，才会检查 `$NIRI_SOCKET`，最后回退到 Hyprland。这样可以避免继承的合成器套接字导致误判。
 
 <br>
 
@@ -193,8 +190,6 @@ cd Tide-island-*
 ```bash
 ./install.sh --skip-deps
 ```
-
-如果 `/usr/bin/quickshell` 存在，安装器会直接使用它；否则，安装器会构建当前发行版锁定、经过验证且与其兼容的 Quickshell 版本。需要 Qt 6.6 或更高版本。
 
 此源码安装器适用于 `/usr` 可写的常规 Linux 系统。NixOS、Fedora Silverblue 等声明式或不可变系统应改用原生软件包，或在可写的开发容器中安装。
 
@@ -243,23 +238,9 @@ hl.exec_once("tide-island")
 tide-island-config-app
 ```
 
-- **快捷键**：配置工作区总览、应用启动器、音乐播放器、通知中心、控制中心、剪贴板历史管理器（默认 `Super + V`）、天气（默认 `Super + E`）以及日历（默认 `Super + K`）的快捷键。
-- **交互**：配置灵动岛胶囊的鼠标点击动作（支持为音乐播放器、控制中心、剪贴板历史自定义左键、中键、右键映射）。
-- **天气**：配置自动定位或自定义城市名称、温度单位（°C 或 °F）以及刷新间隔。
-- **日历**：快速月历视图，提供周数与相对日期显示。可在控制中心点击日期、使用 `Super + K` 快捷键打开，支持鼠标滚轮与方向键切换月份、`Home` 键返回今天、`Esc` 快速关闭。
-
-
 ### 锁屏
 
 运行 Tide Island 后，打开 **设置 → Lock screen**，点击 **Lock now**，或点击控制中心电源菜单中的锁屏按钮。需要快捷键时，在 **Shortcut** 页配置并应用 **Lock screen**（默认 `Super + L`）。
-
-### 磨砂玻璃外观
-
-灵动岛、网络与蓝牙详情、日历便笺使用统一的半透明材质。在设置的
-**General → Island Appearance → Background Transparency** 中调整岛的背景不透明度，
-设为 100 可使用实色背景。**Background Blur** 开关统一控制岛和所有详情面板的模糊，
-修改后立即生效。默认不透明度为 **60**，模糊**开启**（`islandBlurEnabled: true`）。
-设置窗口支持浅色和深色外观。
 
 原生背景模糊使用 Quickshell 0.3+ 的
 [BackgroundEffect](https://quickshell.org/docs/v0.3.0/types/Quickshell.Wayland/BackgroundEffect/)，
@@ -278,7 +259,7 @@ hl.layer_rule({
 })
 ```
 
-## Spotify 收藏
+### Spotify 收藏
 
 音乐播放器支持把当前歌曲加入／移出 Spotify 的「已喜欢歌曲」，并同步客户端中的收藏状态。
 使用本机 Spotify 桌面客户端和 [Spicetify](https://spicetify.app/docs/getting-started)，无需 Spotify 开发者应用、API Key、浏览器自动化或集中服务器，也没有开发者应用的用户白名单限制。
@@ -357,10 +338,6 @@ journalctl --user -u tide-island -f
 | `quickshell ipc call tide toggleApplicationLauncher` | 打开或关闭应用启动器 |
 
 <br>
-
-### 清除通知
-
-点击通知卡片上的 × 按钮可以清除单条通知。使用 **全部清除** 可以一次清除所有通知。
 
 ## 贡献
 
