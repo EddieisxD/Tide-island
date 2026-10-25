@@ -55,50 +55,10 @@ It's built with Quickshell, QML, and C++/Qt 6. Most of the effort went into maki
 ## Preview
 
 ### Tide Island
-<table>
-  <tr>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/mp.png" width="100%" alt="Music player" />
-    </td>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/msg.png" width="100%" alt="Message preview" />
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/timer.png" width="100%" alt="Timer" />
-    </td>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/wallpaper%20switcher.png" width="100%" alt="Wallpaper switcher" />
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/cc_2.png" width="100%" alt="Control center" />
-    </td>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/Workspace overview_2.png" width="100%" alt="Workspace overview" />
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/weather.png" width="100%" alt="Weather & Forecast" />
-    </td>
-    <td width="50%">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/calendar.png" width="100%" alt="Calendar" />
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/clipboard.png" width="100%" alt="Clipboard history" />
-    </td>
-  </tr>
-</table>
 
-### Config App
 
-<img src="https://raw.githubusercontent.com/enhaoswen/Tide-island/display/Preview/config_app.png" width = "90%">
-<br>
+https://github.com/user-attachments/assets/bb3defb8-8af0-4a13-acde-3ed8ee8feef9
+
 
 ## Features
 
