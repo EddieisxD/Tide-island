@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import IslandBackend
 import "qml/island"
+import "qml/lockscreen"
 
 Scope {
     id: shellRoot
@@ -32,6 +33,17 @@ Scope {
         id: globalWeatherService
     }
     readonly property var weatherService: globalWeatherService
+
+    LockScreenController {
+        id: lockScreenController
+        weatherService: globalWeatherService
+        onLockFailed: reason => shellRoot.showNotificationAll("Tide Island", "Lock screen unavailable", reason)
+    }
+
+    function lockScreen() {
+        closeOverviewAll();
+        lockScreenController.lock();
+    }
 
     function forEachWindow(callback) {
         const windows = panelVariants.instances ? panelVariants.instances : [];
@@ -229,6 +241,10 @@ Scope {
 
     IpcHandler {
         target: "tide"
+
+        function lockScreen() {
+            shellRoot.lockScreen();
+        }
 
         function spotifyFavoritesStatus(): string {
             return JSON.stringify({

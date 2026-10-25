@@ -1,7 +1,9 @@
 #include "backend.hpp"
 #include "../common/JsonComments.h"
+#include "../common/LockScreenConfig.h"
 
 #include <QClipboard>
+#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -24,7 +26,24 @@ constexpr auto colorSchemeKey = "appearance/colorScheme";
 constexpr auto tideShortcutPrefix = "/usr/bin/quickshell ipc --any-display -p /usr/share/tide-island call ";
 constexpr auto legacyTideShortcutPrefix = "/usr/bin/quickshell ipc -p /usr/share/tide-island call ";
 constexpr auto quickshellPath = "/usr/bin/quickshell";
-constexpr auto tideQmlPath = "/usr/share/tide-island";
+QString tideQmlPath()
+{
+    const QString overridePath = QString::fromLocal8Bit(qgetenv("TIDE_ISLAND_QML_PATH"));
+    if (!overridePath.isEmpty())
+        return overridePath;
+    const QString installedPath = QDir::cleanPath(
+        QCoreApplication::applicationDirPath() + QStringLiteral("/../share/tide-island"));
+    return QFileInfo::exists(installedPath + QStringLiteral("/shell.qml"))
+        ? installedPath : QStringLiteral("/usr/share/tide-island");
+}
+
+QString shellPath(QString path)
+{
+    if (!path.contains(QRegularExpression(QStringLiteral("[^A-Za-z0-9_./-]"))))
+        return path;
+    path.replace(u'\'', QStringLiteral("'\\''"));
+    return u'\'' + path + u'\'';
+}
 
 struct ShortcutBinding {
     QString mods;
@@ -59,6 +78,7 @@ QVariantList defaultShortcutBindings()
         shortcutMap(QStringLiteral("SUPER"), QStringLiteral("M"), QStringLiteral("tide"), QStringLiteral("togglePlayer")),
         shortcutMap(QStringLiteral("SUPER"), QStringLiteral("C"), QStringLiteral("tide"), QStringLiteral("toggleControlCenter")),
         shortcutMap(QStringLiteral("SUPER"), QStringLiteral("P"), QStringLiteral("tide"), QStringLiteral("togglePowerMenu")),
+        shortcutMap(QStringLiteral("SUPER"), QStringLiteral("L"), QStringLiteral("tide"), QStringLiteral("lockScreen")),
         shortcutMap(QStringLiteral("SUPER"), QStringLiteral("N"), QStringLiteral("tide"), QStringLiteral("toggleNotificationCenter")),
         shortcutMap(QStringLiteral("SUPER"), QStringLiteral("W"), QStringLiteral("tide"), QStringLiteral("toggleWallpaperPicker")),
         shortcutMap(QStringLiteral("SUPER"), QStringLiteral("slash"), QStringLiteral("tide"), QStringLiteral("toggleApplicationLauncher")),
@@ -280,7 +300,8 @@ QVariantList mergedShortcutBindings(const QVariantList &baseBindings, const QVar
 
 QString shortcutCommand(const ShortcutBinding &binding)
 {
-    return QString::fromLatin1(tideShortcutPrefix) + binding.target + u' ' + binding.method;
+    return QString::fromLatin1(quickshellPath) + QStringLiteral(" ipc --any-display -p ")
+        + shellPath(tideQmlPath()) + QStringLiteral(" call ") + binding.target + u' ' + binding.method;
 }
 
 QStringList shortcutCommandArgs(const ShortcutBinding &binding)
@@ -290,7 +311,7 @@ QStringList shortcutCommandArgs(const ShortcutBinding &binding)
         QStringLiteral("ipc"),
         QStringLiteral("--any-display"),
         QStringLiteral("-p"),
-        QString::fromLatin1(tideQmlPath),
+        tideQmlPath(),
         QStringLiteral("call"),
         binding.target,
         binding.method,
@@ -760,13 +781,30 @@ bool Backend::toggleApplicationLauncher(){
             QStringLiteral("ipc"),
             QStringLiteral("--any-display"),
             QStringLiteral("-p"),
-            QString::fromLatin1(tideQmlPath),
+            tideQmlPath(),
             QStringLiteral("call"),
             QStringLiteral("tide"),
             QStringLiteral("toggleApplicationLauncher"),
         });
     setErrorString(started ? QString() : QStringLiteral("Could not start the application launcher command."));
     return started;
+}
+
+QVariantMap Backend::lockScreenSettings() const {
+    return LockScreenConfig::normalized(QJsonObject::fromVariantMap(
+        userConfig().value(QStringLiteral("lockScreen")).toMap()));
+}
+
+bool Backend::lockScreen() {
+    QProcess command;
+    command.start(QString::fromLatin1(quickshellPath), {
+        QStringLiteral("ipc"), QStringLiteral("--any-display"), QStringLiteral("-p"),
+        tideQmlPath(),
+        QStringLiteral("call"), QStringLiteral("tide"), QStringLiteral("lockScreen")});
+    const bool success = command.waitForFinished(1500) && command.exitCode() == 0
+        && command.exitStatus() == QProcess::NormalExit;
+    setErrorString(success ? QString() : QStringLiteral("Could not reach Tide Island. Start the shell before locking."));
+    return success;
 }
 
 QString Backend::hyprlandConfigPath() const{

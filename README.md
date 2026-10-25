@@ -252,6 +252,26 @@ tide-island-config-app
 - **Interaction**: Configure click actions for the dynamic island pill (Left, Middle, and Right mouse buttons for Player, Control Center, and Clipboard History).
 - **Weather**: Configure auto-detection or custom city name, temperature units (°C or °F), and refresh interval.
 - **Calendar**: Quick month view with week numbers and relative date indicators. Click the date in the Control Center, press `Super + K`, or use the scroll wheel / arrow keys to browse months. Press `Home` to return to today, and `Esc` to close.
+- **Lock screen**: A blurred wallpaper, frosted dark panels, a large clock and white media controls that match the Island's existing player and control center. Open **Lock screen** in the settings sidebar for a live preview, the Dashboard layout with optional custom widget positions, individual widget toggles, custom avatar and name, 12/24-hour time, seconds, wallpaper, blur, dimming, opacity and corner radius.
+
+### Lock screen
+
+Use **Lock now** in settings, the control center's power menu, or configure **Lock screen** on the Shortcut page (default `Super + L`, applied through the existing shortcut workflow). The shell must be running. You can also open the settings page directly or lock through IPC:
+
+```bash
+tide-island-config-app --lock-screen
+quickshell ipc --any-display -p /usr/share/tide-island call tide lockScreen
+```
+
+The lock uses Wayland `ext-session-lock-v1` on every display and PAM's system `login` service for the current user. Only successful authentication releases the lock; the preview uses example data and does not authenticate. Passwords are never saved to the configuration. A functioning `Quickshell.Services.Pam` module and system `/etc/pam.d/login` are required. While locked, automatic QML file reload is paused. Do not stop or restart the shell while locked: a conforming compositor keeps a crashed session lock closed.
+
+Entry animates the wallpaper and staggers the cards into view. After successful authentication, the cards fade out and the wallpaper clears before the session is released. All displays share one timeline. Use **Replay** on the settings page to preview both animations without locking.
+
+Enable **Layout → Custom positions** to drag the profile, clock, password, weather and music cards in the preview. Battery status appears at the right of the profile card and moves with it. Positions save automatically and use relative screen coordinates, with cards kept inside the display on other resolutions. **Reset positions** restores the preset positions; choosing Dashboard disables custom positioning without deleting it. Editing handles are shown only in settings.
+
+Music uses the Island's existing MPRIS player and Spotify favorite connection. Unsupported controls are disabled. Weather shares General's location, units and refresh settings, and labels cached data. All appearance settings live in the `lockScreen` object in `userconfig.json`. This feature provides manual locking; idle and suspend automation can call the same IPC command.
+
+The layout draws on [Caelestia](https://github.com/caelestia-dots/shell), with blurred wallpaper and widget arrangements initially inspired by [Hyprlock-Dots](https://github.com/mahaveergurjar/Hyprlock-Dots). Materials, colours and controls use Tide Island's existing style tokens in both the shell and settings preview. Reference images and source code are not bundled.
 
 ### Frosted materials
 

@@ -53,6 +53,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Test installer branches
+        if: ${{ hashFiles('tests/installer_tests.sh') != '' }}
         run: tests/installer_tests.sh
 
       - name: Configure Tide Island
@@ -83,6 +84,8 @@ jobs:
           test -f "$stage/usr/share/tide-island/qml/island/FavoriteHeart.qml"
           test -f "$stage/usr/share/tide-island/qml/island/assets/heart-filled.svg"
           test -f "$stage/usr/share/tide-island/shell.qml"
+          test -f "$stage/usr/share/tide-island/qml/lockscreen/LockScreenController.qml"
+          test -f "$stage/usr/share/tide-island/qml/lockscreen/LockAuthentication.qml"
           test -f "$stage/usr/$libdir/libIslandBackend.so"
           test -f "$stage/usr/$libdir/qt6/qml/IslandBackend/libIslandBackendplugin.so"
           test -f "$stage/usr/lib/systemd/user/tide-island.service"
@@ -91,6 +94,7 @@ jobs:
           grep -Fq "/$libdir/qt6/qml\"" "$stage/usr/bin/tide-island"
           grep -Fq "prefer :/qt/qml/TideIsland/" "$stage/usr/$libdir/qt6/qml/TideIsland/qmldir"
           QT_QPA_PLATFORM=offscreen "$stage/usr/bin/tide-island-config-app" --validate-qml
+          QT_QPA_PLATFORM=offscreen "$stage/usr/bin/tide-island-config-app" --lock-screen --validate-qml
 
   source-release:
     name: Publish source release

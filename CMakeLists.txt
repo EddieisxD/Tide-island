@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(TideIsland VERSION 1.0.47 LANGUAGES CXX)
+project(TideIsland VERSION 1.0.48 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -36,6 +36,8 @@ target_link_libraries(lyricsmpris PRIVATE
 
 enable_testing()
 
+# Source checkouts may omit the optional test directory.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 add_executable(clipboard_preview_tests tests/clipboard_preview_tests.cpp)
 target_link_libraries(clipboard_preview_tests PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::Test)
 target_compile_definitions(clipboard_preview_tests PRIVATE
@@ -252,6 +254,8 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/lyricsmpris_runtime_tests.cpp")
     set_tests_properties(lyricsmpris_runtime PROPERTIES TIMEOUT 20)
 endif()
 
+endif()
+
 add_subdirectory(Tide-island-app)
 
 # Main Backend Module (Combining all C++ components)
@@ -368,7 +372,8 @@ install(FILES integrations/spicetify/tide-island.js
 )
 
 # Install desktop entry
-install(FILES tide-island.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+configure_file(tide-island.desktop ${CMAKE_CURRENT_BINARY_DIR}/tide-island.desktop @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tide-island.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 
 # Install systemd user service
 install(FILES tide-island.service DESTINATION lib/systemd/user)

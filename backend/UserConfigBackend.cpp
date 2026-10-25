@@ -1,5 +1,6 @@
 #include "UserConfigBackend.h"
 #include "../common/JsonComments.h"
+#include "../common/LockScreenConfig.h"
 
 #include <QFile>
 #include <QFileInfo>
@@ -464,6 +465,9 @@ void UserConfigBackend::loadConfig()
     }
 
     updateField(this, m_configError, nextConfigError, &UserConfigBackend::configErrorChanged);
+    // Keep the last usable lock appearance if an external edit is incomplete.
+    if (nextConfigError.isEmpty() || m_lockScreen.isEmpty())
+        updateField(this, m_lockScreen, LockScreenConfig::normalized(configObject.value("lockScreen").toObject()), &UserConfigBackend::lockScreenChanged);
 
     updateField(this, m_wallpaperPath, jsonString(configObject, QLatin1String("wallpaperPath"), m_defaultWallpaperPath), &UserConfigBackend::wallpaperPathChanged);
     updateField(this, m_wallpaperLibraryPath, jsonString(configObject, QLatin1String("wallpaperLibraryPath"), QString()), &UserConfigBackend::wallpaperLibraryPathChanged);

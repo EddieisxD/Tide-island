@@ -7,6 +7,8 @@ ApplicationWindow {
     visible: true
     width: 1000
     height: 600
+    minimumWidth: 860
+    minimumHeight: 600
     title: "Tide Island Config Application"
     color: Theme.totalBgColor
     palette.window: Theme.totalBgColor
@@ -38,6 +40,8 @@ ApplicationWindow {
             return shortcutPage
         case 5:
             return interactionPage
+        case 6:
+            return lockScreenPage
         default:
             return null
         }
@@ -250,6 +254,22 @@ ApplicationWindow {
         }
 
         Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 485
+            color: currentPage === 6 ? Theme.selectedColor : Theme.textColor
+            text: mainSplitLine.x < 130 ? "L" : "Lock screen"
+            font.family: Theme.titleFontFamily
+            font.pixelSize: 23
+            Behavior on color { ColorAnimation { duration: Theme.animationDuration } }
+            MouseArea {
+                anchors.fill: parent
+                anchors.margins: -8
+                cursorShape: Qt.PointingHandCursor
+                onClicked: selectPage(6)
+            }
+        }
+
+        Text {
             id: appearanceButton
 
             anchors.horizontalCenter: parent.horizontalCenter
@@ -316,6 +336,13 @@ ApplicationWindow {
 
         Interaction {
             id: interactionPage
+            anchors.fill: parent
+            visible: false
+            opacity: 0
+        }
+
+        LockScreenSettings {
+            id: lockScreenPage
             anchors.fill: parent
             visible: false
             opacity: 0

@@ -57,10 +57,30 @@ set_source_files_properties(Theme.qml ConfigStore.qml PROPERTIES
     QT_QML_SINGLETON_TYPE TRUE
 )
 
+# Share the real lock-screen view with its settings preview; keep it independent
+# of Quickshell so this application can also render it offscreen.
+set(LOCK_SCREEN_VIEW_FILES
+    ../qml/lockscreen/LockScreenView.qml
+    ../qml/lockscreen/LockCard.qml
+    ../qml/lockscreen/LockGlyph.qml
+    ../qml/lockscreen/LockAction.qml
+    ../qml/lockscreen/LockScreenTransition.qml
+    ../qml/lockscreen/LockLayoutHandle.qml
+)
+foreach(lock_file IN LISTS LOCK_SCREEN_VIEW_FILES)
+    get_filename_component(lock_name "${lock_file}" NAME)
+    set_source_files_properties("${lock_file}" PROPERTIES QT_RESOURCE_ALIAS "${lock_name}")
+endforeach()
+
 qt_add_qml_module(tide-island-config-app
     URI TideIsland
     VERSION 1.0
     RESOURCE_PREFIX /qt/qml
+
+    # Use the shell's existing material and control tokens in the native preview.
+    SOURCES
+        ../backend/StyleTokensBackend.h
+        ../backend/StyleTokensBackend.cpp
 
     QML_FILES
         Main.qml
@@ -79,7 +99,11 @@ qt_add_qml_module(tide-island-config-app
         Interaction.qml
         Shortcut.qml
         ApplicationLauncherSettings.qml
+        LockScreenSettings.qml
+        ${LOCK_SCREEN_VIEW_FILES}
 )
+
+target_include_directories(tide-island-config-app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../backend)
 
 install(TARGETS tide-island-config-app
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -90,7 +114,8 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/TideIsland
     PATTERN "*.qrc" EXCLUDE
 )
 
-install(FILES tide-island-config.desktop
+configure_file(tide-island-config.desktop ${CMAKE_CURRENT_BINARY_DIR}/tide-island-config.desktop @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tide-island-config.desktop
     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
 )
 

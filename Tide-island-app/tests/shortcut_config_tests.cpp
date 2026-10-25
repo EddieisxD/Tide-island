@@ -61,7 +61,25 @@ private slots:
     void niriValidationFailureDoesNotIncludeManagedFile();
     void configAppColorSchemePersists();
     void powerProfileDetectionResolvesCorrectly();
+    void shortcutCommandsHonorInstallPathOverride();
 };
+
+void ShortcutConfigTests::shortcutCommandsHonorInstallPathOverride()
+{
+    QTemporaryDir configHome;
+    QVERIFY(configHome.isValid());
+    const QByteArray previous = qgetenv("TIDE_ISLAND_QML_PATH");
+    const bool wasSet = qEnvironmentVariableIsSet("TIDE_ISLAND_QML_PATH");
+    qputenv("XDG_CONFIG_HOME", configHome.path().toLocal8Bit());
+    qputenv("TIDE_ISLAND_COMPOSITOR", "niri");
+    qputenv("TIDE_ISLAND_QML_PATH", "/tmp/Tide Island's shell");
+    Backend backend;
+    const QString commands = backend.niriConfigCommands();
+    QVERIFY(commands.contains(QStringLiteral("/tmp/Tide Island's shell")));
+    QVERIFY(!commands.contains(QStringLiteral("/usr/share/tide-island")));
+    if (wasSet) qputenv("TIDE_ISLAND_QML_PATH", previous);
+    else qunsetenv("TIDE_ISLAND_QML_PATH");
+}
 
 void ShortcutConfigTests::hyprlandDefaultsIncludeWorkspaceOverview()
 {
@@ -485,7 +503,7 @@ void ShortcutConfigTests::niriDefaultsExcludeWorkspaceOverview()
     Backend backend;
     QVERIFY(!backend.supportsTideWorkspaceOverview());
     QVERIFY(backend.supportsNiriShortcutSnippets());
-    QCOMPARE(backend.shortcutBindings().size(), 15);
+    QCOMPARE(backend.shortcutBindings().size(), 16);
 
     for (const QVariant &value : backend.shortcutBindings()) {
         const QVariantMap binding = value.toMap();

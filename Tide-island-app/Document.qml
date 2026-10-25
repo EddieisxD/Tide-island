@@ -28,7 +28,7 @@ PagePanel {
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
 
             onWheel: function(event) {
-                const rawDelta = event.pixelDelta.y !== 0 ? event.pixelDelta.y : event.angleDelta.y / 120 * 64
+                const rawDelta = event.pixelDelta.y !== 0 ? event.pixelDelta.y : event.angleDelta.y / 120 * 80
                 const maxY = Math.max(0, scroller.contentHeight - scroller.height)
                 scroller.contentY = Math.max(0, Math.min(maxY, scroller.contentY - rawDelta))
                 event.accepted = true

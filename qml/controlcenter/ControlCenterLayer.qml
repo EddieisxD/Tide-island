@@ -15,6 +15,7 @@ Item {
     signal requestNotification(string appName, string summary, string body)
     signal weatherRequested()
     signal calendarRequested()
+    signal lockRequested()
 
     readonly property var userConfig: UserConfig
 
@@ -559,8 +560,7 @@ Item {
             sleepProcess.running = true;
     }
     function triggerLock() {
-        if (!lockProcess.running)
-            lockProcess.running = true;
+        controlCenter.lockRequested();
     }
 
     function closeConnectivityPanels(emitSignals) {
@@ -1213,24 +1213,6 @@ Item {
             if (exitCode !== 0)
                 controlCenter.requestNotification("Power", "Sleep failed",
                     "Could not suspend via systemctl.");
-        }
-    }
-    Process {
-        id: lockProcess
-        command: [
-            "sh",
-            "-c",
-            "if command -v hyprlock >/dev/null 2>&1; then hyprlock; "
-                + "elif command -v swaylock >/dev/null 2>&1; then swaylock; "
-                + "elif command -v i3lock >/dev/null 2>&1; then i3lock; "
-                + "elif command -v loginctl >/dev/null 2>&1; then loginctl lock-session; "
-                + "else exit 127; fi"
-        ]
-        running: false
-        onExited: function(exitCode) {
-            if (exitCode === 127)
-                controlCenter.requestNotification("Power", "Lock unavailable",
-                    "Install hyprlock, swaylock, or i3lock to enable screen locking.");
         }
     }
 

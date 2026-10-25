@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QVariantList>
+#include <QVariantMap>
 #include <QtQml/qqml.h>
 
 class UserConfigBackend final : public QObject {
@@ -12,6 +13,7 @@ class UserConfigBackend final : public QObject {
     QML_SINGLETON
 
     Q_PROPERTY(QString userConfigPath READ userConfigPath CONSTANT FINAL)
+    Q_PROPERTY(QVariantMap lockScreen READ lockScreen NOTIFY lockScreenChanged FINAL)
     Q_PROPERTY(QString configError READ configError NOTIFY configErrorChanged FINAL)
     Q_PROPERTY(QString defaultWallpaperPath READ defaultWallpaperPath WRITE setDefaultWallpaperPath NOTIFY defaultWallpaperPathChanged FINAL)
     Q_PROPERTY(QString defaultTlpSudoPassword READ defaultTlpSudoPassword WRITE setDefaultTlpSudoPassword NOTIFY defaultTlpSudoPasswordChanged FINAL)
@@ -72,6 +74,7 @@ class UserConfigBackend final : public QObject {
 
 public:
     explicit UserConfigBackend(QObject *parent = nullptr);
+    QVariantMap lockScreen() const { return m_lockScreen; }
 
     QString userConfigPath() const;
     QString configError() const;
@@ -134,6 +137,7 @@ public:
     Q_INVOKABLE void reload();
 
 signals:
+    void lockScreenChanged();
     void configErrorChanged();
     void defaultWallpaperPathChanged();
     void defaultTlpSudoPasswordChanged();
@@ -188,6 +192,7 @@ signals:
     void weatherRefreshIntervalChanged();
 
 private:
+    QVariantMap m_lockScreen;
     void scheduleReload();
     void loadConfig();
     void updateWatchedPaths();

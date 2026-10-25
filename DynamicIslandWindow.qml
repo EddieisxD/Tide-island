@@ -2804,6 +2804,11 @@ PanelWindow {
 
                 sourceComponent: Component {
                     ControlCenterLayer {
+                        onLockRequested: {
+                            islandContainer.smartRestoreState();
+                            if (root.shellRootController)
+                                root.shellRootController.lockScreen();
+                        }
                         iconFontFamily: root.iconFontFamily
                         textFontFamily: root.textFontFamily
                         heroFontFamily: root.heroFontFamily

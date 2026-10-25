@@ -249,6 +249,30 @@ tide-island-config-app
 - **日历**：快速月历视图，提供周数与相对日期显示。可在控制中心点击日期、使用 `Super + K` 快捷键打开，支持鼠标滚轮与方向键切换月份、`Home` 键返回今天、`Esc` 快速关闭。
 
 
+### 锁屏
+
+在设置应用左侧打开 **Lock screen**，可实时预览双列卡片（Dashboard）布局，并拖动自定义控件位置。头像、名字、时间、日期、音乐、天气和电量可以独立开关；支持自选头像与锁屏壁纸、12/24 小时制、秒数、底部留言，以及背景模糊、暗度、卡片透明度和圆角调整。没有自选壁纸时使用 Tide Island 的壁纸，图片不可用时显示渐变背景。
+
+点击 **Lock now**、控制中心电源菜单中的锁屏按钮，或在 **Shortcut** 页配置锁屏快捷键（默认 `Super + L`，需按现有快捷键流程应用）。运行中的灵动岛也支持以下命令：
+
+```bash
+# 直接打开锁屏设置页
+tide-island-config-app --lock-screen
+
+# 锁定会话
+quickshell ipc --any-display -p /usr/share/tide-island call tide lockScreen
+```
+
+锁屏通过 Wayland `ext-session-lock-v1` 覆盖所有显示器，使用系统 PAM `login` 服务验证当前用户密码，只有验证成功才会解锁。密码不会写入配置文件，设置预览使用示例数据且不进行认证。需要可用的 `Quickshell.Services.Pam` 模块和系统 `/etc/pam.d/login`。锁定期间暂停自动 QML 热重载；请先解锁再停止或重启灵动岛，因为合成器会在锁屏进程退出后继续保持锁定。
+
+进入时壁纸渐入、卡片依次浮现；系统验证成功后，卡片淡出、背景恢复清晰，再释放会话锁。多显示器共用同一条动画时间线。设置页的 **Replay** 按钮可以预览进入和退出动画。
+
+开启 **Layout → Custom positions**，即可在预览中拖动用户信息、时间、密码框、天气和音乐卡片。电量显示在用户信息卡片的最右侧，随头像和名字一起移动。位置自动保存，按屏幕比例应用，并在不同分辨率下保持卡片完整可见。**Reset positions** 恢复默认位置；选择 Dashboard 会关闭自定义位置并保留已有记录。编辑边框和拖动操作只在设置预览中出现。
+
+音乐卡片复用灵动岛的 MPRIS 播放器，包含上一首、播放/暂停、下一首和收藏。收藏沿用已有的 Spotify 连接，不支持的操作会禁用。天气沿用 General 中的位置、单位和刷新设置，缓存数据会标注。外观配置保存在 `userconfig.json` 的 `lockScreen` 对象中。目前提供手动锁屏，空闲或休眠自动化工具可调用上面的 IPC 命令。
+
+布局参考 [Caelestia](https://github.com/caelestia-dots/shell)；模糊背景与组件布局最初参考了 [Hyprlock-Dots](https://github.com/mahaveergurjar/Hyprlock-Dots)。材质和控件沿用 Tide Island 原有的苹果风格：深灰磨砂、细描边和白色播放按钮，锁屏与设置预览使用同一份样式定义。未打包参考项目的图片或源码。
+
 ### 磨砂玻璃外观
 
 灵动岛、网络与蓝牙详情、日历便笺使用统一的半透明材质。在设置的
