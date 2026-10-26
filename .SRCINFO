@@ -51,6 +51,6 @@ pkgbase = tide-island
 	options = !debug
 	options = !strip
 	source = tide-island-1.0.49.tar.xz::https://github.com/enhaoswen/Tide-island/releases/download/1.0.49/tide-island-source.tar.xz
-	sha256sums = SKIP
+	sha256sums = d6a9828834b52248db1f820bbfa3d8960563c1d166c7381946c366038e77d24f
 
 pkgname = tide-island
