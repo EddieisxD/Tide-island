@@ -117,6 +117,14 @@ Item {
         const centerY = boundedCenter(point.y * height, height, cardHeight * factor);
         return Qt.point((centerX - body.x) / factor - cardWidth / 2, (centerY - body.y) / factor - cardHeight / 2);
     }
+    function widgetPosition(key) {
+        const cards = {profile: profileCard, clock: clockCard, password: passwordCard, weather: weatherCard, music: musicCard};
+        const card = cards[key];
+        if (!card)
+            return Qt.point(0.5, 0.5);
+        return Qt.point((body.x + (card.x + card.width / 2) * body.scale) / Math.max(1, width),
+                        (body.y + (card.y + card.height / 2) * body.scale) / Math.max(1, height));
+    }
     function beginMove(key, card, pointer) {
         if (!layoutEditing || unlocking)
             return;
@@ -293,6 +301,7 @@ Item {
         transformOrigin: Item.TopLeft
 
         LockCard {
+            id: profileCard
             styleTokens: root.styleTokens
             objectName: "profileCard"
             z: root.movingWidget === "profile" ? 10 : 0
@@ -404,6 +413,7 @@ Item {
         }
 
         LockCard {
+            id: clockCard
             styleTokens: root.styleTokens
             objectName: "clockCard"
             z: root.movingWidget === "clock" ? 10 : 0
@@ -578,6 +588,7 @@ Item {
         }
 
         LockCard {
+            id: weatherCard
             styleTokens: root.styleTokens
             objectName: "weatherCard"
             z: root.movingWidget === "weather" ? 10 : 0

@@ -30,6 +30,16 @@ PagePanel {
         };
         update("positions", positions);
     }
+    function saveCoordinate(key, axis, value) {
+        const point = preview.widgetPosition(key);
+        const coordinate = Math.max(0, Math.min(100, value)) / 100;
+        savePosition(key, axis === "x" ? coordinate : point.x, axis === "y" ? coordinate : point.y);
+    }
+    function resetPosition(key) {
+        const positions = Object.assign({}, values.positions);
+        delete positions[key];
+        update("positions", positions);
+    }
     onVisibleChanged: if (!visible)
         flush()
     Component.onDestruction: flush()
@@ -117,7 +127,7 @@ PagePanel {
                 width: parent.width
                 ToggleRow {
                     title: "Custom positions"
-                    hint: "Drag cards in the preview. Positions are saved automatically."
+                    hint: "Drag cards in the preview or enter their positions below. Changes save automatically."
                     settingKey: "customLayoutEnabled"
                 }
 
@@ -221,6 +231,37 @@ PagePanel {
                             enabled: !root.values.customLayoutEnabled && !previewTransition.exiting
                             onClicked: previewTransition.beginExit()
                         }
+                    }
+                }
+            }
+
+            Section {
+                title: "Widget positions"
+                width: parent.width
+                visible: root.values.customLayoutEnabled
+
+                Text {
+                    width: parent.width
+                    text: "X and Y set each card's center as a percentage of the screen. Cards stay within the screen edges."
+                    wrapMode: Text.Wrap
+                    color: Theme.subtleTextColor
+                    font.family: Theme.textFontFamily
+                    font.pixelSize: 14
+                }
+
+                Repeater {
+                    model: [
+                        {key: "profile", label: "User information"},
+                        {key: "clock", label: "Time and date"},
+                        {key: "password", label: "Password"},
+                        {key: "weather", label: "Weather"},
+                        {key: "music", label: "Music player"}
+                    ]
+
+                    PositionRow {
+                        required property var modelData
+                        title: modelData.label
+                        widgetKey: modelData.key
                     }
                 }
             }
@@ -658,6 +699,74 @@ PagePanel {
                 }
             }
             contentItem: Item {}
+        }
+    }
+
+    component PositionRow: SettingRow {
+        id: positionRow
+        required property string widgetKey
+        readonly property point currentPosition: preview.widgetPosition(widgetKey)
+
+        Text {
+            text: "X"
+            anchors.verticalCenter: parent.verticalCenter
+            color: Theme.subtleTextColor
+            font.family: Theme.textFontFamily
+            font.pixelSize: 14
+        }
+        CoordinateField {
+            objectName: positionRow.widgetKey + "PositionX"
+            currentValue: positionRow.currentPosition.x * 100
+            field.Accessible.name: positionRow.title + " horizontal position (%)"
+            onCommitted: value => root.saveCoordinate(positionRow.widgetKey, "x", value)
+        }
+        Text {
+            text: "Y"
+            anchors.verticalCenter: parent.verticalCenter
+            color: Theme.subtleTextColor
+            font.family: Theme.textFontFamily
+            font.pixelSize: 14
+        }
+        CoordinateField {
+            objectName: positionRow.widgetKey + "PositionY"
+            currentValue: positionRow.currentPosition.y * 100
+            field.Accessible.name: positionRow.title + " vertical position (%)"
+            onCommitted: value => root.saveCoordinate(positionRow.widgetKey, "y", value)
+        }
+        SettingButton {
+            objectName: positionRow.widgetKey + "PositionReset"
+            text: "Reset"
+            Accessible.name: "Reset " + positionRow.title + " position"
+            enabled: root.values.positions[positionRow.widgetKey] !== undefined
+            onClicked: root.resetPosition(positionRow.widgetKey)
+        }
+    }
+
+    component CoordinateField: ConfigTextField {
+        id: coordinateField
+        required property real currentValue
+        signal committed(real value)
+        width: 82
+        height: 36
+        text: currentValue.toFixed(1)
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
+        validator: DoubleValidator {
+            bottom: 0
+            top: 100
+            decimals: 1
+            notation: DoubleValidator.StandardNotation
+            locale: "C"
+        }
+        onAccepted: commit()
+        onEditingFinished: commit()
+        onCurrentValueChanged: if (!field.activeFocus)
+            text = currentValue.toFixed(1)
+
+        function commit() {
+            const value = Number(text);
+            if (text.trim() !== "" && isFinite(value))
+                committed(Math.max(0, Math.min(100, value)));
+            text = currentValue.toFixed(1);
         }
     }
 

@@ -315,6 +315,15 @@ target_link_libraries(IslandBackend PRIVATE
     ${UDEV_LIB}
 )
 
+add_executable(tlp_password_tests backend/tests/tlp_password_tests.cpp)
+target_include_directories(tlp_password_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/backend)
+target_link_libraries(tlp_password_tests PRIVATE IslandBackend Qt6::Qml Qt6::Test)
+target_compile_definitions(tlp_password_tests PRIVATE
+    CONTROL_CENTER_SOURCE="${CMAKE_CURRENT_SOURCE_DIR}/qml/controlcenter/ControlCenterLayer.qml"
+)
+add_test(NAME tlp_password COMMAND tlp_password_tests)
+set_tests_properties(tlp_password PROPERTIES TIMEOUT 20)
+
 # Installation Rules
 include(GNUInstallDirs)
 
